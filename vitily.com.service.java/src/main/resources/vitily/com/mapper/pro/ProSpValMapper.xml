@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.pro.ProSpValMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.pro.TbProSpVal" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="cate_id" property="cateId" jdbcType="INTEGER" />
+    <result column="news_id" property="newsId" jdbcType="INTEGER" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="in_price" property="inPrice" jdbcType="DECIMAL" />
+    <result column="prime_price" property="primePrice" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="stock" property="stock" jdbcType="INTEGER" />
+    <result column="spec_ids" property="specIds" jdbcType="VARCHAR" />
+    <result column="spec_names" property="specNames" jdbcType="VARCHAR" />
+    <result column="spec_types" property="specTypes" jdbcType="VARCHAR" />
+    <result column="spec_par_ids" property="specParIds" jdbcType="VARCHAR" />
+    <result column="spec_par_vals" property="specParVals" jdbcType="VARCHAR" />
+    <result column="guid" property="guid" jdbcType="VARCHAR" />
+    <result column="hits" property="hits" jdbcType="INTEGER" />
+    <result column="pay_way_ids" property="payWayIds" jdbcType="VARCHAR" />
+    <result column="delivery_ids" property="deliveryIds" jdbcType="VARCHAR" />
+    <result column="max_canbuy" property="maxCanbuy" jdbcType="INTEGER" />
+    <result column="label_ids" property="labelIds" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="pic_list" property="picList" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.pro.TvProSpVal" extends="BaseResultMap" >
+    <result column="cateName" property="cateName" jdbcType="VARCHAR" />
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+    <result column="newsTitle" property="newsTitle" jdbcType="VARCHAR" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.pro.TvProSpVal" extends="ListBaseResultMap" >
+  </resultMap>
+  <resultMap id="shopcarListMap" type="vitily.com.tv_entity.pro.TvProSpVal" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="prime_price" property="primePrice" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="stock" property="stock" jdbcType="INTEGER" />
+    <result column="spec_names" property="specNames" jdbcType="VARCHAR" />
+    <result column="spec_par_vals" property="specParVals" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="pic_list" property="picList" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, 
+    e.`type_id`, e.`cate_id`, e.`news_id`, e.`number`, e.`in_price`, 
+    e.`prime_price`, e.`sale_price`, e.`stock`, e.`spec_ids`, e.`spec_names`, 
+    e.`spec_types`, e.`spec_par_ids`, e.`spec_par_vals`, e.`guid`, e.`hits`, 
+    e.`pay_way_ids`, e.`delivery_ids`, e.`max_canbuy`, e.`label_ids`, e.`description`, 
+    e.`pic_list`, e.`product_id`, e.`version`
+  </sql>
+  <sql id="query_condition">
+  	  <!-- tb_entity:等于查询 -->
+    <if test="null != entity">
+      <if test="entity.productId != null" >
+        and e.product_id = #{entity.productId,jdbcType=BIGINT}
+      </if>
+      <if test="entity.number != null" >
+        and e.number = #{entity.number,jdbcType=VARCHAR}
+      </if>
+      <if test="entity.specIds != null" >
+        and e.spec_ids = #{entity.specIds,jdbcType=VARCHAR}
+      </if>
+      <if test="entity.specParIds != null" >
+        and e.spec_par_ids = #{entity.specParIds,jdbcType=VARCHAR}
+      </if>
+      <if test="entity.guid != null" >
+        and e.guid = #{entity.guid,jdbcType=VARCHAR}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- 下面是ts -->
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pro_sp_val e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_pro_sp_val
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.pro.TbProSpVal" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pro_sp_val (`create_date`, `update_date`, `deltag`, 
+      `state`, `sort`, `type_id`, 
+      `cate_id`, `news_id`, `number`, 
+      `in_price`, `prime_price`, `sale_price`, 
+      `stock`, `spec_ids`, `spec_names`, 
+      `spec_types`, `spec_par_ids`, `spec_par_vals`, 
+      `guid`, `hits`, `pay_way_ids`, 
+      `delivery_ids`, `max_canbuy`, `label_ids`, 
+      `description`, `pic_list`, `product_id`, 
+      `version`)
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{sort,jdbcType=DECIMAL}, #{typeId,jdbcType=INTEGER}, 
+      #{cateId,jdbcType=INTEGER}, #{newsId,jdbcType=INTEGER}, #{number,jdbcType=VARCHAR}, 
+      #{inPrice,jdbcType=DECIMAL}, #{primePrice,jdbcType=DECIMAL}, #{salePrice,jdbcType=DECIMAL}, 
+      #{stock,jdbcType=INTEGER}, #{specIds,jdbcType=VARCHAR}, #{specNames,jdbcType=VARCHAR}, 
+      #{specTypes,jdbcType=VARCHAR}, #{specParIds,jdbcType=VARCHAR}, #{specParVals,jdbcType=VARCHAR}, 
+      #{guid,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{payWayIds,jdbcType=VARCHAR}, 
+      #{deliveryIds,jdbcType=VARCHAR}, #{maxCanbuy,jdbcType=INTEGER}, #{labelIds,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{picList,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.pro.TbProSpVal" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pro_sp_val
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="typeId != null" >
+        `type_id`,
+      </if>
+      <if test="cateId != null" >
+        `cate_id`,
+      </if>
+      <if test="newsId != null" >
+        `news_id`,
+      </if>
+      <if test="number != null" >
+        `number`,
+      </if>
+      <if test="inPrice != null" >
+        `in_price`,
+      </if>
+      <if test="primePrice != null" >
+        `prime_price`,
+      </if>
+      <if test="salePrice != null" >
+        `sale_price`,
+      </if>
+      <if test="stock != null" >
+        `stock`,
+      </if>
+      <if test="specIds != null" >
+        `spec_ids`,
+      </if>
+      <if test="specNames != null" >
+        `spec_names`,
+      </if>
+      <if test="specTypes != null" >
+        `spec_types`,
+      </if>
+      <if test="specParIds != null" >
+        `spec_par_ids`,
+      </if>
+      <if test="specParVals != null" >
+        `spec_par_vals`,
+      </if>
+      <if test="guid != null" >
+        `guid`,
+      </if>
+      <if test="hits != null" >
+        `hits`,
+      </if>
+      <if test="payWayIds != null" >
+        `pay_way_ids`,
+      </if>
+      <if test="deliveryIds != null" >
+        `delivery_ids`,
+      </if>
+      <if test="maxCanbuy != null" >
+        `max_canbuy`,
+      </if>
+      <if test="labelIds != null" >
+        `label_ids`,
+      </if>
+      <if test="description != null" >
+        `description`,
+      </if>
+      <if test="picList != null" >
+        `pic_list`,
+      </if>
+      <if test="productId != null" >
+        `product_id`,
+      </if>
+      <if test="version != null" >
+        `version`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="cateId != null" >
+        #{cateId,jdbcType=INTEGER},
+      </if>
+      <if test="newsId != null" >
+        #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="inPrice != null" >
+        #{inPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="primePrice != null" >
+        #{primePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null" >
+        #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="specIds != null" >
+        #{specIds,jdbcType=VARCHAR},
+      </if>
+      <if test="specNames != null" >
+        #{specNames,jdbcType=VARCHAR},
+      </if>
+      <if test="specTypes != null" >
+        #{specTypes,jdbcType=VARCHAR},
+      </if>
+      <if test="specParIds != null" >
+        #{specParIds,jdbcType=VARCHAR},
+      </if>
+      <if test="specParVals != null" >
+        #{specParVals,jdbcType=VARCHAR},
+      </if>
+      <if test="guid != null" >
+        #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="hits != null" >
+        #{hits,jdbcType=INTEGER},
+      </if>
+      <if test="payWayIds != null" >
+        #{payWayIds,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryIds != null" >
+        #{deliveryIds,jdbcType=VARCHAR},
+      </if>
+      <if test="maxCanbuy != null" >
+        #{maxCanbuy,jdbcType=INTEGER},
+      </if>
+      <if test="labelIds != null" >
+        #{labelIds,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="picList != null" >
+        #{picList,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.pro.TbProSpVal" >
+    update tb_pro_sp_val
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="typeId != null" >
+        `type_id` = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="cateId != null" >
+        `cate_id` = #{cateId,jdbcType=INTEGER},
+      </if>
+      <if test="newsId != null" >
+        `news_id` = #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        `number` = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="inPrice != null" >
+        `in_price` = #{inPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="primePrice != null" >
+        `prime_price` = #{primePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        `sale_price` = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null" >
+        `stock` = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="specIds != null" >
+        `spec_ids` = #{specIds,jdbcType=VARCHAR},
+      </if>
+      <if test="specNames != null" >
+        `spec_names` = #{specNames,jdbcType=VARCHAR},
+      </if>
+      <if test="specTypes != null" >
+        `spec_types` = #{specTypes,jdbcType=VARCHAR},
+      </if>
+      <if test="specParIds != null" >
+        `spec_par_ids` = #{specParIds,jdbcType=VARCHAR},
+      </if>
+      <if test="specParVals != null" >
+        `spec_par_vals` = #{specParVals,jdbcType=VARCHAR},
+      </if>
+      <if test="guid != null" >
+        `guid` = #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="hits != null" >
+        `hits` = #{hits,jdbcType=INTEGER},
+      </if>
+      <if test="payWayIds != null" >
+        `pay_way_ids` = #{payWayIds,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryIds != null" >
+        `delivery_ids` = #{deliveryIds,jdbcType=VARCHAR},
+      </if>
+      <if test="maxCanbuy != null" >
+        `max_canbuy` = #{maxCanbuy,jdbcType=INTEGER},
+      </if>
+      <if test="labelIds != null" >
+        `label_ids` = #{labelIds,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        `description` = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="picList != null" >
+        `pic_list` = #{picList,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        `product_id` = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="version != null" >
+        `version` = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.pro.TbProSpVal" >
+    update tb_pro_sp_val
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `type_id` = #{typeId,jdbcType=INTEGER},
+      `cate_id` = #{cateId,jdbcType=INTEGER},
+      `news_id` = #{newsId,jdbcType=INTEGER},
+      `number` = #{number,jdbcType=VARCHAR},
+      `in_price` = #{inPrice,jdbcType=DECIMAL},
+      `prime_price` = #{primePrice,jdbcType=DECIMAL},
+      `sale_price` = #{salePrice,jdbcType=DECIMAL},
+      `stock` = #{stock,jdbcType=INTEGER},
+      `spec_ids` = #{specIds,jdbcType=VARCHAR},
+      `spec_names` = #{specNames,jdbcType=VARCHAR},
+      `spec_types` = #{specTypes,jdbcType=VARCHAR},
+      `spec_par_ids` = #{specParIds,jdbcType=VARCHAR},
+      `spec_par_vals` = #{specParVals,jdbcType=VARCHAR},
+      `guid` = #{guid,jdbcType=VARCHAR},
+      `hits` = #{hits,jdbcType=INTEGER},
+      `pay_way_ids` = #{payWayIds,jdbcType=VARCHAR},
+      `delivery_ids` = #{deliveryIds,jdbcType=VARCHAR},
+      `max_canbuy` = #{maxCanbuy,jdbcType=INTEGER},
+      `label_ids` = #{labelIds,jdbcType=VARCHAR},
+      `description` = #{description,jdbcType=VARCHAR},
+      `pic_list` = #{picList,jdbcType=VARCHAR},
+      `product_id` = #{productId,jdbcType=INTEGER},
+      `version` = #{version,jdbcType=INTEGER}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByBean" parameterType="vitily.com.ts_entity.pro.TsProSpVal" >
+    update tb_pro_sp_val
+    <set >
+      <if test="null != entity">
+      <if test="entity.createDate != null" >
+        `create_date` = #{entity.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entity.updateDate != null" >
+        `update_date` = #{entity.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entity.deltag != null" >
+        `deltag` = #{entity.deltag,jdbcType=INTEGER},
+      </if>
+      <if test="entity.state != null" >
+        `state` = #{entity.state,jdbcType=INTEGER},
+      </if>
+      <if test="entity.sort != null" >
+        `sort` = #{entity.sort,jdbcType=DECIMAL},
+      </if>
+      <if test="entity.typeId != null" >
+        `type_id` = #{entity.typeId,jdbcType=INTEGER},
+      </if>
+      <if test="entity.cateId != null" >
+        `cate_id` = #{entity.cateId,jdbcType=INTEGER},
+      </if>
+      <if test="entity.newsId != null" >
+        `news_id` = #{entity.newsId,jdbcType=INTEGER},
+      </if>
+      <if test="entity.number != null" >
+        `number` = #{entity.number,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.inPrice != null" >
+        `in_price` = #{entity.inPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="entity.primePrice != null" >
+        `prime_price` = #{entity.primePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="entity.salePrice != null" >
+        `sale_price` = #{entity.salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="entity.stock != null" >
+        `stock` = #{entity.stock,jdbcType=INTEGER},
+      </if>
+      <if test="entity.specIds != null" >
+        `spec_ids` = #{entity.specIds,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.specNames != null" >
+        `spec_names` = #{entity.specNames,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.specTypes != null" >
+        `spec_types` = #{entity.specTypes,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.specParIds != null" >
+        `spec_par_ids` = #{entity.specParIds,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.specParVals != null" >
+        `spec_par_vals` = #{entity.specParVals,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.guid != null" >
+        `guid` = #{entity.guid,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.hits != null" >
+        `hits` = #{entity.hits,jdbcType=INTEGER},
+      </if>
+      <if test="entity.payWayIds != null" >
+        `pay_way_ids` = #{entity.payWayIds,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.deliveryIds != null" >
+        `delivery_ids` = #{entity.deliveryIds,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.maxCanbuy != null" >
+        `max_canbuy` = #{entity.maxCanbuy,jdbcType=INTEGER},
+      </if>
+      <if test="entity.labelIds != null" >
+        `label_ids` = #{entity.labelIds,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.description != null" >
+        `description` = #{entity.description,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.picList != null" >
+        `pic_list` = #{entity.picList,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.productId != null" >
+        `product_id` = #{entity.productId,jdbcType=INTEGER},
+      </if>
+      <if test="entity.version != null" >
+        `version` = #{entity.version,jdbcType=INTEGER},
+      </if>
+      </if>
+    </set>
+    where
+    1=1
+    <if test="idStr != null and idStr !=''">
+    	and id in (${idStr})
+    </if>
+    <if test="null != entity">
+   	<if test="entity.id != null and entity.id > 0">
+   		and id = #{entity.id,jdbcType=BIGINT}
+   	</if>
+   	<if test="oldVersion != null">
+   		and version = #{oldVersion,jdbcType=BIGINT}
+   	</if>
+    </if>
+  </update>
+  
+  <select id="getShopcarList" parameterType="java.util.Map" resultMap="shopcarListMap">
+  	select id as product_id,name as productName,sale_price,prime_price,stock,state,0 as id,'' as spec_names,'' as spec_par_vals,pic_list from tb_pro_base
+	where id in(${proIds}) and deltag=0
+	union all 
+	select product_id,p.name as productName,s.sale_price,p.prime_price,s.stock,s.state,s.id,s.spec_names,s.spec_par_vals,s.pic_list from tb_pro_sp_val s
+	left join tb_pro_base p on p.id=s.product_id
+	where s.id in(${specParIds}) and s.deltag=0 and p.deltag=0
+  </select>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select e.*,c.name as cateName,t.name as typeName,p.name as productName,n.title as newsTitle
+    from tb_pro_sp_val e
+    left join tb_comm_category c on e.cate_id=c.id
+    left join tb_comm_type t on e.type_id=t.id
+    left join tb_pro_base p on e.product_id=p.id
+    left join tb_cms_news n on e.news_id=n.id
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.pro.TsProSpVal" resultMap="BaseResultMap">
+    select e.* from tb_pro_sp_val e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.pro.TsProSpVal" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_pro_sp_val e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.pro.TsProSpVal" resultMap="ListBaseResultMap">
+  	select e.*,c.name as cateName,t.name as typeName,p.name as productName,n.title as newsTitle
+    from tb_pro_sp_val e
+    left join tb_comm_category c on e.cate_id=c.id
+    left join tb_comm_type t on e.type_id=t.id
+    left join tb_pro_base p on e.product_id=p.id
+    left join tb_cms_news n on e.news_id=n.id
+     where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

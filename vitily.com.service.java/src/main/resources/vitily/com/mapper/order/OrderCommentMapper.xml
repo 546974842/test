@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.order.OrderCommentMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.order.TbOrderComment" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="show_id" property="showId" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="parent_comment_id" property="parentCommentId" jdbcType="INTEGER" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="pic0_url" property="pic0Url" jdbcType="VARCHAR" />
+    <result column="pic1_url" property="pic1Url" jdbcType="VARCHAR" />
+    <result column="pic2_url" property="pic2Url" jdbcType="VARCHAR" />
+    <result column="pic3_url" property="pic3Url" jdbcType="VARCHAR" />
+    <result column="pic4_url" property="pic4Url" jdbcType="VARCHAR" />
+    <result column="video0_url" property="video0Url" jdbcType="VARCHAR" />
+    <result column="audit_description" property="auditDescription" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="vitily.com.tv_entity.order.TvOrderComment" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="vitily.com.tv_entity.order.TvOrderComment" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, e.`type`, 
+    e.`order_id`, e.`show_id`, e.`member_id`, e.`parent_comment_id`, e.`tags`, e.`content`, 
+    e.`pic0_url`, e.`pic1_url`, e.`pic2_url`, e.`pic3_url`, e.`pic4_url`, e.`video0_url`,
+    e.`audit_description`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.state != null">
+        and e.state = #{entity.state}
+      </if>
+      <if test="entity.type != null">
+        and e.type = #{entity.type}
+      </if>
+      <if test="entity.orderId != null">
+        and e.order_id = #{entity.orderId}
+      </if>
+      <if test="entity.showId != null">
+        and e.show_id = #{entity.showId}
+      </if>
+      <if test="entity.memberId != null">
+        and e.member_id = #{entity.memberId}
+      </if>
+      <if test="entity.parentCommentId != null">
+        and e.parent_comment_id = #{entity.parentCommentId}
+      </if>
+    </if>
+    <if test="sellerMemberId != null">
+      and sb.member_id = #{sellerMemberId}
+    </if>
+    <if test="stateStr != null and stateStr != ''">
+      and e.state in(${stateStr})
+    </if>
+  </sql>
+  <sql id="exist_condition" >
+    <if test="entity != null" >
+      (1=0
+      )
+      <if test="entity.id != null" >
+        and e.`id` != #{entity.id,jdbcType=INTEGER}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_order_comment e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.order.TbOrderComment" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_order_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="type != null" >
+        `type`,
+      </if>
+      <if test="orderId != null" >
+        `order_id`,
+      </if>
+      <if test="showId != null" >
+        `show_id`,
+      </if>
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="parentCommentId != null" >
+        `parent_comment_id`,
+      </if>
+      <if test="tags != null" >
+        `tags`,
+      </if>
+      <if test="content != null" >
+        `content`,
+      </if>
+      <if test="pic0Url != null" >
+        `pic0_url`,
+      </if>
+      <if test="pic1Url != null" >
+        `pic1_url`,
+      </if>
+      <if test="pic2Url != null" >
+        `pic2_url`,
+      </if>
+      <if test="pic3Url != null" >
+        `pic3_url`,
+      </if>
+      <if test="pic4Url != null" >
+        `pic4_url`,
+      </if>
+      <if test="video0Url != null" >
+        `video0_url`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="showId != null" >
+        #{showId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="parentCommentId != null" >
+        #{parentCommentId,jdbcType=INTEGER},
+      </if>
+      <if test="tags != null" >
+        #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="pic0Url != null" >
+        #{pic0Url,jdbcType=VARCHAR},
+      </if>
+      <if test="pic1Url != null" >
+        #{pic1Url,jdbcType=VARCHAR},
+      </if>
+      <if test="pic2Url != null" >
+        #{pic2Url,jdbcType=VARCHAR},
+      </if>
+      <if test="pic3Url != null" >
+        #{pic3Url,jdbcType=VARCHAR},
+      </if>
+      <if test="pic4Url != null" >
+        #{pic4Url,jdbcType=VARCHAR},
+      </if>
+      <if test="video0Url != null" >
+        #{video0Url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.order.TbOrderComment" >
+    update tb_order_comment
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        `order_id` = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="showId != null" >
+        `show_id` = #{showId,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="parentCommentId != null" >
+        `parent_comment_id` = #{parentCommentId,jdbcType=INTEGER},
+      </if>
+      <if test="tags != null" >
+        `tags` = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        `content` = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="pic0Url != null" >
+        `pic0_url` = #{pic0Url,jdbcType=VARCHAR},
+      </if>
+      <if test="pic1Url != null" >
+        `pic1_url` = #{pic1Url,jdbcType=VARCHAR},
+      </if>
+      <if test="pic2Url != null" >
+        `pic2_url` = #{pic2Url,jdbcType=VARCHAR},
+      </if>
+      <if test="pic3Url != null" >
+        `pic3_url` = #{pic3Url,jdbcType=VARCHAR},
+      </if>
+      <if test="pic4Url != null" >
+        `pic4_url` = #{pic4Url,jdbcType=VARCHAR},
+      </if>
+      <if test="video0Url != null" >
+        `video0_url` = #{video0Url,jdbcType=VARCHAR},
+      </if>
+      <if test="auditDescription != null" >
+        `audit_description` = #{auditDescription,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    ,sb.member_id showOwnerMemberId
+    from tb_order_comment e
+    left join tb_show_base sb on sb.id=e.show_id
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="ViewResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" resultMap="BaseResultMap" parameterType="vitily.com.ts_entity.order.TsOrderComment" >
+    select 
+    <include refid="Base_Column_List" />
+     from tb_order_comment e
+     left join tb_show_base sb on sb.id=e.show_id
+    where 1=1
+    <include refid="query_condition" />
+     order by e.`id` desc limit 1
+  </select>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="vitily.com.ts_entity.order.TsOrderComment" >
+    select count(1) as recordCount from tb_order_comment e
+    left join tb_show_base sb on sb.id=e.show_id
+    where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="vitily.com.ts_entity.order.TsOrderComment" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="null != pageInfo" >
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''" >
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="selectSingleByBean" resultMap="BaseResultMap" parameterType="vitily.com.ts_entity.order.TsOrderComment">
+    <include refid="select_for_list_tv" />
+    where 1=1
+    <include refid="query_condition" />
+    limit 1
+  </select>
+  <select id="isExists" resultType="java.lang.Boolean" parameterType="vitily.com.ts_entity.order.TsOrderComment" >
+    select case when exists(select 0 from tb_order_comment e where
+    <include refid="exist_condition" />
+    ) then 1 else 0 end as exists_record from dual
+  </select>
+</mapper>

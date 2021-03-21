@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.pay.PayOrderMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.pay.TbPayOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="payment" property="payment" jdbcType="INTEGER" />
+    <result column="pay_mobile" property="payMobile" jdbcType="VARCHAR" />
+    <result column="actual_pay_user" property="actualPayUser" jdbcType="VARCHAR" />
+    <result column="order_amount" property="orderAmount" jdbcType="DECIMAL" />
+    <result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+    <result column="pay_state" property="payState" jdbcType="INTEGER" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="paid_time" property="paidTime" jdbcType="TIMESTAMP" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="lock_state" property="lockState" jdbcType="INTEGER" />
+    <result column="invoice_title" property="invoiceTitle" jdbcType="VARCHAR" />
+    <result column="invoice_content" property="invoiceContent" jdbcType="VARCHAR" />
+    <result column="invoice_receive_addr" property="invoiceReceiveAddr" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+    <result column="invoice_reseiver" property="invoiceReseiver" jdbcType="VARCHAR" />
+    <result column="notify_mobile" property="notifyMobile" jdbcType="VARCHAR" />
+    <result column="notify_email" property="notifyEmail" jdbcType="VARCHAR" />
+    <result column="invoice_state" property="invoiceState" jdbcType="INTEGER" />
+    <result column="need_invoice" property="needInvoice" jdbcType="INTEGER" />
+    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="other0" property="other0" jdbcType="VARCHAR" />
+    <result column="other1" property="other1" jdbcType="VARCHAR" />
+    <result column="other2" property="other2" jdbcType="VARCHAR" />
+    <result column="other3" property="other3" jdbcType="VARCHAR" />
+    <result column="other4" property="other4" jdbcType="VARCHAR" />
+    <result column="other5" property="other5" jdbcType="VARCHAR" />
+    <result column="other6" property="other6" jdbcType="VARCHAR" />
+    <result column="pay_deadline" property="payDeadline" jdbcType="TIMESTAMP" />
+    <result column="request_ip" property="requestIp" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="transaction_id" property="transactionId" jdbcType="VARCHAR" />
+    <result column="last_wx_qrcode_date" property="lastWxQrcodeDate" jdbcType="DATE" />
+    <result column="last_ali_qrcode_date" property="lastAliQrcodeDate" jdbcType="DATE" />
+    <result column="last_union_qrcode_date" property="lastUnionQrcodeDate" jdbcType="DATE" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.pay.TvPayOrder" extends="BaseResultMap" >
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.pay.TvPayOrder" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`payment`, e.`pay_mobile`, e.`actual_pay_user`, e.`order_amount`, e.`paid_amount`,
+    e.`pay_state`, e.`order_time`, e.`paid_time`, e.`order_no`, e.`lock_state`, e.`invoice_title`,
+    e.`invoice_content`, e.`invoice_receive_addr`, e.`post_code`, e.`invoice_reseiver`, e.`notify_mobile`,
+    e.`notify_email`, e.`invoice_state`, e.`need_invoice`, e.`desc`, e.`remark`, e.`other0`, e.`other1`,
+    e.`other2`, e.`other3`, e.`other4`, e.`other5`, e.`other6`, e.`pay_deadline`, e.`request_ip`, e.`user_id`,
+    e.`transaction_id`, e.`last_wx_qrcode_date`, e.`last_ali_qrcode_date`, e.`last_union_qrcode_date`,
+    e.`create_date`, e.`update_date`, e.`deltag`, e.`state`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.id != null" >
+        and e.id = #{entity.id}
+      </if>
+      <if test="entity.orderNo != null and entity.orderNo != ''" >
+        and e.order_no = #{entity.orderNo}
+      </if>
+      <if test="entity.userId != null and entity.userId != ''" >
+        and e.user_id = #{entity.userId}
+      </if>
+      <if test="entity.payState != null" >
+        and e.pay_state = #{entity.payState}
+      </if>
+      <if test="entity.payment != null" >
+        and e.payment = #{entity.payment}
+      </if>
+      <if test="entity.lockState != null" >
+        and e.lock_state = #{entity.lockState}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+    <!-- ts -->
+    <if test="paymentStr != null and paymentStr != ''">
+      and e.payment in ${paymentStr}
+    </if>
+    <if test="payStateStr != null and payStateStr != ''">
+      and e.pay_state in ${payStateStr}
+    </if>
+    <if test="selPayMobile != null and selPayMobile != ''">
+      and e.pay_mobile like concat('%',#{selPayMobile,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="selOrderNo != null and selOrderNo != ''">
+      and e.order_no like concat('%',#{selOrderNo,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="beginOrderAmount != null">
+      and e.order_amount >= #{beginOrderAmount,jdbcType=DECIMAL}
+    </if>
+    <if test="endOrderAmount != null">
+      <![CDATA[and e.order_amount <= #{endOrderAmount,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="beginPaidAmount != null">
+      and e.paid_amount >= #{beginPaidAmount,jdbcType=DECIMAL}
+    </if>
+    <if test="endPaidAmount != null">
+      <![CDATA[and e.paid_amount <= #{endPaidAmount,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="beginOrderTime != null and beginOrderTime != ''">
+      and e.order_time >= #{beginOrderTime}
+    </if>
+    <if test="endOrderTime != null and endOrderTime != ''">
+      <![CDATA[and e.order_time <= #{endOrderTime}]]>
+    </if>
+    <if test="beginPaidTime != null and beginPaidTime != ''">
+      and e.paid_time >= #{beginPaidTime}
+    </if>
+    <if test="endPaidTime != null and endPaidTime != ''">
+      <![CDATA[and e.paid_time <= #{endPaidTime}]]>
+    </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pay_order e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="vitily.com.tb_entity.pay.TbPayOrder" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pay_order (`payment`, `pay_mobile`, `actual_pay_user`, 
+      `order_amount`, `paid_amount`, `pay_state`, 
+      `order_time`, `paid_time`, `order_no`, 
+      `lock_state`, `invoice_title`, `invoice_content`, 
+      `invoice_receive_addr`, `post_code`, `invoice_reseiver`, 
+      `notify_mobile`, `notify_email`, `invoice_state`, 
+      `need_invoice`, `desc`, `remark`, 
+      `other0`, `other1`, `other2`, 
+      `other3`, `other4`, `other5`, 
+      `other6`, `pay_deadline`, `request_ip`, 
+      `user_id`, `transaction_id`, `last_wx_qrcode_date`, 
+      `last_ali_qrcode_date`, `last_union_qrcode_date`, `create_date`, 
+      `update_date`, `deltag`, `state`
+      )
+    values (#{payment,jdbcType=INTEGER}, #{payMobile,jdbcType=VARCHAR}, #{actualPayUser,jdbcType=VARCHAR}, 
+      #{orderAmount,jdbcType=DECIMAL}, #{paidAmount,jdbcType=DECIMAL}, #{payState,jdbcType=INTEGER}, 
+      #{orderTime,jdbcType=TIMESTAMP}, #{paidTime,jdbcType=TIMESTAMP}, #{orderNo,jdbcType=VARCHAR}, 
+      #{lockState,jdbcType=INTEGER}, #{invoiceTitle,jdbcType=VARCHAR}, #{invoiceContent,jdbcType=VARCHAR}, 
+      #{invoiceReceiveAddr,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, #{invoiceReseiver,jdbcType=VARCHAR}, 
+      #{notifyMobile,jdbcType=VARCHAR}, #{notifyEmail,jdbcType=VARCHAR}, #{invoiceState,jdbcType=INTEGER}, 
+      #{needInvoice,jdbcType=INTEGER}, #{desc,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{other0,jdbcType=VARCHAR}, #{other1,jdbcType=VARCHAR}, #{other2,jdbcType=VARCHAR}, 
+      #{other3,jdbcType=VARCHAR}, #{other4,jdbcType=VARCHAR}, #{other5,jdbcType=VARCHAR}, 
+      #{other6,jdbcType=VARCHAR}, #{payDeadline,jdbcType=TIMESTAMP}, #{requestIp,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{transactionId,jdbcType=VARCHAR}, #{lastWxQrcodeDate,jdbcType=DATE}, 
+      #{lastAliQrcodeDate,jdbcType=DATE}, #{lastUnionQrcodeDate,jdbcType=DATE}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.pay.TbPayOrder" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pay_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="payment != null" >
+        `payment`,
+      </if>
+      <if test="payMobile != null" >
+        `pay_mobile`,
+      </if>
+      <if test="actualPayUser != null" >
+        `actual_pay_user`,
+      </if>
+      <if test="orderAmount != null" >
+        `order_amount`,
+      </if>
+      <if test="paidAmount != null" >
+        `paid_amount`,
+      </if>
+      <if test="payState != null" >
+        `pay_state`,
+      </if>
+      <if test="orderTime != null" >
+        `order_time`,
+      </if>
+      <if test="paidTime != null" >
+        `paid_time`,
+      </if>
+      <if test="orderNo != null" >
+        `order_no`,
+      </if>
+      <if test="lockState != null" >
+        `lock_state`,
+      </if>
+      <if test="invoiceTitle != null" >
+        `invoice_title`,
+      </if>
+      <if test="invoiceContent != null" >
+        `invoice_content`,
+      </if>
+      <if test="invoiceReceiveAddr != null" >
+        `invoice_receive_addr`,
+      </if>
+      <if test="postCode != null" >
+        `post_code`,
+      </if>
+      <if test="invoiceReseiver != null" >
+        `invoice_reseiver`,
+      </if>
+      <if test="notifyMobile != null" >
+        `notify_mobile`,
+      </if>
+      <if test="notifyEmail != null" >
+        `notify_email`,
+      </if>
+      <if test="invoiceState != null" >
+        `invoice_state`,
+      </if>
+      <if test="needInvoice != null" >
+        `need_invoice`,
+      </if>
+      <if test="desc != null" >
+        `desc`,
+      </if>
+      <if test="remark != null" >
+        `remark`,
+      </if>
+      <if test="other0 != null" >
+        `other0`,
+      </if>
+      <if test="other1 != null" >
+        `other1`,
+      </if>
+      <if test="other2 != null" >
+        `other2`,
+      </if>
+      <if test="other3 != null" >
+        `other3`,
+      </if>
+      <if test="other4 != null" >
+        `other4`,
+      </if>
+      <if test="other5 != null" >
+        `other5`,
+      </if>
+      <if test="other6 != null" >
+        `other6`,
+      </if>
+      <if test="payDeadline != null" >
+        `pay_deadline`,
+      </if>
+      <if test="requestIp != null" >
+        `request_ip`,
+      </if>
+      <if test="userId != null" >
+        `user_id`,
+      </if>
+      <if test="transactionId != null" >
+        `transaction_id`,
+      </if>
+      <if test="lastWxQrcodeDate != null" >
+        `last_wx_qrcode_date`,
+      </if>
+      <if test="lastAliQrcodeDate != null" >
+        `last_ali_qrcode_date`,
+      </if>
+      <if test="lastUnionQrcodeDate != null" >
+        `last_union_qrcode_date`,
+      </if>
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="payment != null" >
+        #{payment,jdbcType=INTEGER},
+      </if>
+      <if test="payMobile != null" >
+        #{payMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="actualPayUser != null" >
+        #{actualPayUser,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paidAmount != null" >
+        #{paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payState != null" >
+        #{payState,jdbcType=INTEGER},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paidTime != null" >
+        #{paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="lockState != null" >
+        #{lockState,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceTitle != null" >
+        #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceContent != null" >
+        #{invoiceContent,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceReceiveAddr != null" >
+        #{invoiceReceiveAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceReseiver != null" >
+        #{invoiceReseiver,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyMobile != null" >
+        #{notifyMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyEmail != null" >
+        #{notifyEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceState != null" >
+        #{invoiceState,jdbcType=INTEGER},
+      </if>
+      <if test="needInvoice != null" >
+        #{needInvoice,jdbcType=INTEGER},
+      </if>
+      <if test="desc != null" >
+        #{desc,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="other0 != null" >
+        #{other0,jdbcType=VARCHAR},
+      </if>
+      <if test="other1 != null" >
+        #{other1,jdbcType=VARCHAR},
+      </if>
+      <if test="other2 != null" >
+        #{other2,jdbcType=VARCHAR},
+      </if>
+      <if test="other3 != null" >
+        #{other3,jdbcType=VARCHAR},
+      </if>
+      <if test="other4 != null" >
+        #{other4,jdbcType=VARCHAR},
+      </if>
+      <if test="other5 != null" >
+        #{other5,jdbcType=VARCHAR},
+      </if>
+      <if test="other6 != null" >
+        #{other6,jdbcType=VARCHAR},
+      </if>
+      <if test="payDeadline != null" >
+        #{payDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestIp != null" >
+        #{requestIp,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionId != null" >
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastWxQrcodeDate != null" >
+        #{lastWxQrcodeDate,jdbcType=DATE},
+      </if>
+      <if test="lastAliQrcodeDate != null" >
+        #{lastAliQrcodeDate,jdbcType=DATE},
+      </if>
+      <if test="lastUnionQrcodeDate != null" >
+        #{lastUnionQrcodeDate,jdbcType=DATE},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.pay.TbPayOrder" >
+    update tb_pay_order
+    <set >
+      <if test="payment != null" >
+        `payment` = #{payment,jdbcType=INTEGER},
+      </if>
+      <if test="payMobile != null" >
+        `pay_mobile` = #{payMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="actualPayUser != null" >
+        `actual_pay_user` = #{actualPayUser,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAmount != null" >
+        `order_amount` = #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="paidAmount != null" >
+        `paid_amount` = #{paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payState != null" >
+        `pay_state` = #{payState,jdbcType=INTEGER},
+      </if>
+      <if test="orderTime != null" >
+        `order_time` = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paidTime != null" >
+        `paid_time` = #{paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderNo != null" >
+        `order_no` = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="lockState != null" >
+        `lock_state` = #{lockState,jdbcType=INTEGER},
+      </if>
+      <if test="invoiceTitle != null" >
+        `invoice_title` = #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceContent != null" >
+        `invoice_content` = #{invoiceContent,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceReceiveAddr != null" >
+        `invoice_receive_addr` = #{invoiceReceiveAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        `post_code` = #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceReseiver != null" >
+        `invoice_reseiver` = #{invoiceReseiver,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyMobile != null" >
+        `notify_mobile` = #{notifyMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyEmail != null" >
+        `notify_email` = #{notifyEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceState != null" >
+        `invoice_state` = #{invoiceState,jdbcType=INTEGER},
+      </if>
+      <if test="needInvoice != null" >
+        `need_invoice` = #{needInvoice,jdbcType=INTEGER},
+      </if>
+      <if test="desc != null" >
+        `desc` = #{desc,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        `remark` = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="other0 != null" >
+        `other0` = #{other0,jdbcType=VARCHAR},
+      </if>
+      <if test="other1 != null" >
+        `other1` = #{other1,jdbcType=VARCHAR},
+      </if>
+      <if test="other2 != null" >
+        `other2` = #{other2,jdbcType=VARCHAR},
+      </if>
+      <if test="other3 != null" >
+        `other3` = #{other3,jdbcType=VARCHAR},
+      </if>
+      <if test="other4 != null" >
+        `other4` = #{other4,jdbcType=VARCHAR},
+      </if>
+      <if test="other5 != null" >
+        `other5` = #{other5,jdbcType=VARCHAR},
+      </if>
+      <if test="other6 != null" >
+        `other6` = #{other6,jdbcType=VARCHAR},
+      </if>
+      <if test="payDeadline != null" >
+        `pay_deadline` = #{payDeadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestIp != null" >
+        `request_ip` = #{requestIp,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        `user_id` = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionId != null" >
+        `transaction_id` = #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastWxQrcodeDate != null" >
+        `last_wx_qrcode_date` = #{lastWxQrcodeDate,jdbcType=DATE},
+      </if>
+      <if test="lastAliQrcodeDate != null" >
+        `last_ali_qrcode_date` = #{lastAliQrcodeDate,jdbcType=DATE},
+      </if>
+      <if test="lastUnionQrcodeDate != null" >
+        `last_union_qrcode_date` = #{lastUnionQrcodeDate,jdbcType=DATE},
+      </if>
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.pay.TbPayOrder" >
+    update tb_pay_order
+    set `payment` = #{payment,jdbcType=INTEGER},
+      `pay_mobile` = #{payMobile,jdbcType=VARCHAR},
+      `actual_pay_user` = #{actualPayUser,jdbcType=VARCHAR},
+      `order_amount` = #{orderAmount,jdbcType=DECIMAL},
+      `paid_amount` = #{paidAmount,jdbcType=DECIMAL},
+      `pay_state` = #{payState,jdbcType=INTEGER},
+      `order_time` = #{orderTime,jdbcType=TIMESTAMP},
+      `paid_time` = #{paidTime,jdbcType=TIMESTAMP},
+      `order_no` = #{orderNo,jdbcType=VARCHAR},
+      `lock_state` = #{lockState,jdbcType=INTEGER},
+      `invoice_title` = #{invoiceTitle,jdbcType=VARCHAR},
+      `invoice_content` = #{invoiceContent,jdbcType=VARCHAR},
+      `invoice_receive_addr` = #{invoiceReceiveAddr,jdbcType=VARCHAR},
+      `post_code` = #{postCode,jdbcType=VARCHAR},
+      `invoice_reseiver` = #{invoiceReseiver,jdbcType=VARCHAR},
+      `notify_mobile` = #{notifyMobile,jdbcType=VARCHAR},
+      `notify_email` = #{notifyEmail,jdbcType=VARCHAR},
+      `invoice_state` = #{invoiceState,jdbcType=INTEGER},
+      `need_invoice` = #{needInvoice,jdbcType=INTEGER},
+      `desc` = #{desc,jdbcType=VARCHAR},
+      `remark` = #{remark,jdbcType=VARCHAR},
+      `other0` = #{other0,jdbcType=VARCHAR},
+      `other1` = #{other1,jdbcType=VARCHAR},
+      `other2` = #{other2,jdbcType=VARCHAR},
+      `other3` = #{other3,jdbcType=VARCHAR},
+      `other4` = #{other4,jdbcType=VARCHAR},
+      `other5` = #{other5,jdbcType=VARCHAR},
+      `other6` = #{other6,jdbcType=VARCHAR},
+      `pay_deadline` = #{payDeadline,jdbcType=TIMESTAMP},
+      `request_ip` = #{requestIp,jdbcType=VARCHAR},
+      `user_id` = #{userId,jdbcType=VARCHAR},
+      `transaction_id` = #{transactionId,jdbcType=VARCHAR},
+      `last_wx_qrcode_date` = #{lastWxQrcodeDate,jdbcType=DATE},
+      `last_ali_qrcode_date` = #{lastAliQrcodeDate,jdbcType=DATE},
+      `last_union_qrcode_date` = #{lastUnionQrcodeDate,jdbcType=DATE},
+      `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectForUpdate" parameterType="java.lang.String" resultMap="TvResultMap">
+    select e.*from tb_pay_order e where order_no = #{orderNo} for update
+  </select>
+  <sql id="select_for_list_tv">
+    select e.* from tb_pay_order e
+  </sql>
+  <select id="selectByOrderId" parameterType="java.lang.Integer" resultMap="TvResultMap">
+    select e.* from tb_pay_order e where e.order_id = #{orderId}
+  </select>
+  <select id="selectByPrimaryKeyForTv" parameterType="java.lang.Integer" resultMap="TvResultMap">
+    <include refid="select_for_list_tv" />
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.pay.TsPayOrder" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_pay_order e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.pay.TsPayOrder" resultMap="ListBaseResultMap">
+    <include refid="select_for_list_tv" />
+    where 1=1
+    <include refid="query_condition" />
+    <include refid="vitily.com.mapper.comm.CommonMapper.page_info_id_instanceof_sort" />
+  </select>
+</mapper>

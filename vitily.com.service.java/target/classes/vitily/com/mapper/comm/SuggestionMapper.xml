@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.comm.SuggestionMapper" >
+
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.comm.TbSuggestion" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="admin_id" property="adminId" jdbcType="INTEGER" />
+    <result column="msg" property="msg" jdbcType="VARCHAR" />
+    <result column="back_msg" property="backMsg" jdbcType="VARCHAR" />
+    <result column="view_state" property="viewState" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`member_id`, 
+    e.`admin_id`, e.`msg`, e.`back_msg`, e.`view_state`, 
+  </sql>
+  
+  <sql id="query_condition">
+      <if test="viewState != null" >
+        and e.view_state = #{viewState,jdbcType=INTEGER}
+      </if>
+      <if test="memberId != null" >
+        and e.member_id = #{memberId,jdbcType=INTEGER}
+      </if>
+      <if test="adminId != null" >
+        and e.admin_id = #{adminId,jdbcType=INTEGER}
+      </if>
+  </sql> 
+  
+  <!-- <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_comm_suggestion e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select> -->
+  
+<!--   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_comm_suggestion
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete> -->
+  
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.comm.TbSuggestion" >
+    insert into tb_comm_suggestion (`create_date`, `update_date`,
+      `member_id`, `admin_id`, `msg`, `back_msg`, `view_state`)
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP},#{memberId,jdbcType=INTEGER}, 
+      #{adminId,jdbcType=INTEGER}, #{msg,jdbcType=VARCHAR}, #{backMsg,jdbcType=VARCHAR},  0 )
+  </insert>
+  
+  <!-- <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.comm.TbSuggestion" >
+    update tb_comm_suggestion
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      <if test="memberId != null" >
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null" >
+        `admin_id` = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="msg != null" >
+        `msg` = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="backMsg != null" >
+        `back_msg` = #{backMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="viewState != null" >
+        `view_state` = #{viewState,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update> -->
+  
+  
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.comm.TsSuggestion" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_comm_suggestion e where 1=1
+    <include refid="query_condition" />
+  </select>
+  
+   <select id="getMaxBean" parameterType="vitily.com.ts_entity.comm.TsSuggestion" resultMap="BaseResultMap">
+    select e.* from tb_comm_suggestion e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.comm.TsSuggestion" resultMap="BaseResultMap">
+  	select *
+  	from tb_comm_suggestion e
+  	where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select> 
+</mapper>

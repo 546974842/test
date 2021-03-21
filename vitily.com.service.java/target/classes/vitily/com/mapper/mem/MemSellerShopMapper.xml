@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vitily.com.mapper.mem.MemSellerShopMapper">
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemSellerShop">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="deltag" jdbcType="INTEGER" property="deltag" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`,
+    `member_id`, e.`shop_id`, e.`shop_name`, e.`type`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId}
+      </if>
+    </if>
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_seller_shop e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_mem_seller_shop
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="vitily.com.tb_entity.mem.TbMemSellerShop">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_seller_shop (
+      `create_date`, `deltag`, 
+      `member_id`, `shop_id`, `shop_name`, `type`)
+      
+    values (NOW(), #{deltag,jdbcType=INTEGER}, 
+      #{memberId,jdbcType=INTEGER}, #{shopId,jdbcType=VARCHAR}, 
+      #{shopName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemSellerShop">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_seller_shop
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        `create_date`,
+      </if>
+      <if test="updateDate != null">
+        `update_date`,
+      </if>
+      <if test="deltag != null">
+        `deltag`,
+      </if>
+      <if test="sort != null">
+        `sort`,
+      </if>
+      <if test="memberId != null">
+        `member_id`,
+      </if>
+      <if test="shopId != null">
+        `shop_id`,
+      </if>
+      <if test="shopName != null">
+        `shop_name`,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        NOW(),
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemSellerShop">
+    update tb_mem_seller_shop
+    <set>
+      <if test="createDate != null">
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null">
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        `shop_id` = #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        `shop_name` = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.mem.TbMemSellerShop">
+    update tb_mem_seller_shop
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `member_id` = #{memberId,jdbcType=INTEGER},
+      `shop_id` = #{shopId,jdbcType=VARCHAR},
+      `shop_name` = #{shoName,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.mem.TsMemSellerShop" resultMap="BaseResultMap">
+    select e.* from tb_mem_seller_shop e
+    where 1=1
+    <include refid="query_condition" />
+   limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.mem.TsMemSellerShop" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_mem_seller_shop e where 1=1
+    <include refid="query_condition" />
+  </select>
+  
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.mem.TsMemSellerShop" resultMap="BaseResultMap">
+   select 
+   <include refid="Base_Column_List" />
+   from tb_mem_seller_shop e where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  
+</mapper>

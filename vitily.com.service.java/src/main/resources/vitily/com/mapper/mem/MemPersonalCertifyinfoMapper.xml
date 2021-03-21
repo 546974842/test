@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.mem.MemPersonalCertifyinfoMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemPersonalCertifyinfo" >
+    <id column="member_id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="id_number_certify_urls" property="idNumberCertifyUrls" jdbcType="VARCHAR" />
+    <result column="id_number_certify_state" property="idNumberCertifyState" jdbcType="TINYINT" />
+    <result column="tb_number" property="tbNumber" jdbcType="VARCHAR" />
+    <result column="tb_number_certify_urls" property="tbNumberCertifyUrls" jdbcType="VARCHAR" />
+    <result column="tb_number_certify_state" property="tbNumberCertifyState" jdbcType="TINYINT" />
+    <result column="zfb_number" property="zfbNumber" jdbcType="VARCHAR" />
+    <result column="zfb_number_certify_urls" property="zfbNumberCertifyUrls" jdbcType="VARCHAR" />
+    <result column="zfb_number_certify_state" property="zfbNumberCertifyState" jdbcType="TINYINT" />
+    <result column="bankcard_number" property="bankcardNumber" jdbcType="VARCHAR" />
+    <result column="bankcard_number_certify_urls" property="bankcardNumberCertifyUrls" jdbcType="VARCHAR" />
+    <result column="bankcard_number_certify_state" property="bankcardNumberCertifyState" jdbcType="TINYINT" />
+    <result column="wx_number" property="wxNumber" jdbcType="VARCHAR" />
+    <result column="wx_number_certify_urls" property="wxNumberCertifyUrls" jdbcType="VARCHAR" />
+    <result column="wx_number_certify_state" property="wxNumberCertifyState" jdbcType="TINYINT" />
+    <result column="qq_number" property="qqNumber" jdbcType="VARCHAR" />
+    <result column="qq_number_certify_urls" property="qqNumberCertifyUrls" jdbcType="VARCHAR" />
+    <result column="qq_number_certify_state" property="qqNumberCertifyState" jdbcType="TINYINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="vitily.com.tv_entity.mem.TvMemPersonalCertifyinfo" extends="BaseResultMap" >
+    <result column="memName" property="memName" jdbcType="VARCHAR" />
+    <result column="memRealName" property="memRealName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ViewResultMap" type="vitily.com.tv_entity.mem.TvMemPersonalCertifyinfo" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`member_id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`id_number`, 
+    e.`id_number_certify_urls`, e.`id_number_certify_state`, e.`tb_number`, e.`tb_number_certify_urls`, 
+    e.`tb_number_certify_state`, e.`zfb_number`, e.`zfb_number_certify_urls`, e.`zfb_number_certify_state`, 
+    e.`bankcard_number`, e.`bankcard_number_certify_urls`, e.`bankcard_number_certify_state`, 
+    e.`wx_number`, e.`wx_number_certify_urls`, e.`wx_number_certify_state`, e.`qq_number`, 
+    e.`qq_number_certify_urls`, e.`qq_number_certify_state`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId}
+      </if>
+      <if test="entity.idNumberCertifyState != null" >
+        and e.id_number_certify_state = #{entity.idNumberCertifyState}
+      </if>
+      <if test="entity.tbNumberCertifyState != null" >
+        and e.tb_number_certify_state = #{entity.tbNumberCertifyState}
+      </if>
+      <if test="entity.zfbNumberCertifyState != null" >
+        and e.zfb_number_certify_state = #{entity.zfbNumberCertifyState}
+      </if>
+      <if test="entity.bankcardNumberCertifyState != null" >
+        and e.bankcard_number_certify_state = #{entity.bankcardNumberCertifyState}
+      </if>
+      <if test="entity.wxNumberCertifyState != null" >
+        and e.wx_number_certify_state = #{entity.wxNumberCertifyState}
+      </if>
+      <if test="entity.qqNumberCertifyState != null" >
+        and e.qq_number_certify_state = #{entity.qqNumberCertifyState}
+      </if>
+    </if>
+  </sql>
+  <sql id="exist_condition">
+    e.member_id=#{entity.memberId}
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_personal_certifyinfo e
+    where e.`member_id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemPersonalCertifyinfo" >
+    insert into tb_mem_personal_certifyinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="idNumber != null" >
+        `id_number`,
+      </if>
+      <if test="idNumberCertifyUrls != null" >
+        `id_number_certify_urls`,
+      </if>
+      <if test="idNumberCertifyState != null" >
+        `id_number_certify_state`,
+      </if>
+      <if test="tbNumber != null" >
+        `tb_number`,
+      </if>
+      <if test="tbNumberCertifyUrls != null" >
+        `tb_number_certify_urls`,
+      </if>
+      <if test="tbNumberCertifyState != null" >
+        `tb_number_certify_state`,
+      </if>
+      <if test="zfbNumber != null" >
+        `zfb_number`,
+      </if>
+      <if test="zfbNumberCertifyUrls != null" >
+        `zfb_number_certify_urls`,
+      </if>
+      <if test="zfbNumberCertifyState != null" >
+        `zfb_number_certify_state`,
+      </if>
+      <if test="bankcardNumber != null" >
+        `bankcard_number`,
+      </if>
+      <if test="bankcardNumberCertifyUrls != null" >
+        `bankcard_number_certify_urls`,
+      </if>
+      <if test="bankcardNumberCertifyState != null" >
+        `bankcard_number_certify_state`,
+      </if>
+      <if test="wxNumber != null" >
+        `wx_number`,
+      </if>
+      <if test="wxNumberCertifyUrls != null" >
+        `wx_number_certify_urls`,
+      </if>
+      <if test="wxNumberCertifyState != null" >
+        `wx_number_certify_state`,
+      </if>
+      <if test="qqNumber != null" >
+        `qq_number`,
+      </if>
+      <if test="qqNumberCertifyUrls != null" >
+        `qq_number_certify_urls`,
+      </if>
+      <if test="qqNumberCertifyState != null" >
+        `qq_number_certify_state`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="idNumber != null" >
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumberCertifyUrls != null" >
+        #{idNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumberCertifyState != null" >
+        #{idNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="tbNumber != null" >
+        #{tbNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tbNumberCertifyUrls != null" >
+        #{tbNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="tbNumberCertifyState != null" >
+        #{tbNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="zfbNumber != null" >
+        #{zfbNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="zfbNumberCertifyUrls != null" >
+        #{zfbNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="zfbNumberCertifyState != null" >
+        #{zfbNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="bankcardNumber != null" >
+        #{bankcardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcardNumberCertifyUrls != null" >
+        #{bankcardNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcardNumberCertifyState != null" >
+        #{bankcardNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="wxNumber != null" >
+        #{wxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNumberCertifyUrls != null" >
+        #{wxNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNumberCertifyState != null" >
+        #{wxNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="qqNumber != null" >
+        #{qqNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="qqNumberCertifyUrls != null" >
+        #{qqNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="qqNumberCertifyState != null" >
+        #{qqNumberCertifyState,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemPersonalCertifyinfo" >
+    update tb_mem_personal_certifyinfo
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="idNumber != null" >
+        `id_number` = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumberCertifyUrls != null" >
+        `id_number_certify_urls` = #{idNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumberCertifyState != null" >
+        `id_number_certify_state` = #{idNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="tbNumber != null" >
+        `tb_number` = #{tbNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tbNumberCertifyUrls != null" >
+        `tb_number_certify_urls` = #{tbNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="tbNumberCertifyState != null" >
+        `tb_number_certify_state` = #{tbNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="zfbNumber != null" >
+        `zfb_number` = #{zfbNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="zfbNumberCertifyUrls != null" >
+        `zfb_number_certify_urls` = #{zfbNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="zfbNumberCertifyState != null" >
+        `zfb_number_certify_state` = #{zfbNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="bankcardNumber != null" >
+        `bankcard_number` = #{bankcardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcardNumberCertifyUrls != null" >
+        `bankcard_number_certify_urls` = #{bankcardNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcardNumberCertifyState != null" >
+        `bankcard_number_certify_state` = #{bankcardNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="wxNumber != null" >
+        `wx_number` = #{wxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNumberCertifyUrls != null" >
+        `wx_number_certify_urls` = #{wxNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNumberCertifyState != null" >
+        `wx_number_certify_state` = #{wxNumberCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="qqNumber != null" >
+        `qq_number` = #{qqNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="qqNumberCertifyUrls != null" >
+        `qq_number_certify_urls` = #{qqNumberCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="qqNumberCertifyState != null" >
+        `qq_number_certify_state` = #{qqNumberCertifyState,jdbcType=TINYINT},
+      </if>
+    </set>
+    where `member_id` = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="select_for_list_tv" >
+    select
+    e.*,
+    m.name memName,
+    p.real_name memRealName
+    from tb_mem_personal_certifyinfo e
+	left join tb_mem_base m on m.id=e.member_id
+	left join tb_mem_personal_userinfo p on p.member_id=e.member_id
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="ViewResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    where e.`member_id` = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" resultMap="BaseResultMap" parameterType="vitily.com.ts_entity.mem.TsMemPersonalCertifyinfo" >
+    select 
+    <include refid="Base_Column_List" />
+     from tb_mem_personal_certifyinfo e where 1=1 
+    <include refid="query_condition" />
+     order by e.`member_id` desc limit 1
+  </select>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="vitily.com.ts_entity.mem.TsMemPersonalCertifyinfo" >
+    select count(1) as recordCount from tb_mem_personal_certifyinfo e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="vitily.com.ts_entity.mem.TsMemPersonalCertifyinfo" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="null != pageInfo" >
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''" >
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" resultType="java.lang.Boolean" parameterType="vitily.com.ts_entity.mem.TsMemPersonalCertifyinfo" >
+    select case when exists(select 0 from tb_mem_personal_certifyinfo e where
+    <include refid="exist_condition" />
+    ) then 1 else 0 end as exists_record from dual
+  </select>
+</mapper>

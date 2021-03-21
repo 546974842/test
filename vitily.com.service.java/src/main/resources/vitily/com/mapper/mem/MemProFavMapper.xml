@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vitily.com.mapper.mem.MemProFavMapper">
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemProFav">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="deltag" jdbcType="INTEGER" property="deltag" />
+    <result column="sort" jdbcType="DECIMAL" property="sort" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="spec_par_pro_id" jdbcType="INTEGER" property="specParProId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.mem.TvMemProFav" extends="BaseResultMap" >
+    <result column="proName" jdbcType="VARCHAR" property="proName" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.mem.TvMemProFav" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List">
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`sort`, e.`state`,
+    e.`member_id`, e.`spec_par_pro_id`, e.`product_id`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.specParProId != null" >
+        and e.spec_par_pro_id = #{entity.specParProId}
+      </if>
+      <if test="entity.productId != null" >
+        and e.product_id = #{entity.productId}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <sql id="query_exist_condition">
+  	(1=0
+    <if test="null != entity">
+      <if test="entity.specParProId != null" >
+        or (e.spec_par_pro_id = #{entity.specParProId,jdbcType=INTEGER})
+      </if>
+    </if>
+      )
+    <if test="null !=entity and null != entity.id">
+      and e.id != #{entity.id,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_pro_fav e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_mem_pro_fav
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.mem.TbMemProFav">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_pro_fav (`create_date`, `update_date`, `deltag`, 
+      `sort`, `member_id`, `spec_par_pro_id`, 
+      `state`,`product_id`)
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{sort,jdbcType=DECIMAL}, #{memberId,jdbcType=INTEGER}, #{specParProId,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER},#{productId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemProFav">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_pro_fav
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        `create_date`,
+      </if>
+      <if test="updateDate != null">
+        `update_date`,
+      </if>
+      <if test="deltag != null">
+        `deltag`,
+      </if>
+      <if test="sort != null">
+        `sort`,
+      </if>
+      <if test="memberId != null">
+        `member_id`,
+      </if>
+      <if test="specParProId != null">
+        `spec_par_pro_id`,
+      </if>
+      <if test="productId != null">
+        `product_id`,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="specParProId != null">
+        #{specParProId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemProFav">
+    update tb_mem_pro_fav
+    <set>
+      <if test="createDate != null">
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null">
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="specParProId != null">
+        `spec_par_pro_id` = #{specParProId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        `product_id` = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.mem.TbMemProFav">
+    update tb_mem_pro_fav
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `member_id` = #{memberId,jdbcType=INTEGER},
+      `spec_par_pro_id` = #{specParProId,jdbcType=INTEGER},
+      `product_id` = #{productId,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select e.*,
+  	p.name proName
+  	from tb_mem_pro_fav e 
+  	left join tb_pro_base p on e.product_id=e.id
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.mem.TsMemProFav" resultMap="BaseResultMap">
+    select e.* from tb_mem_pro_fav e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.mem.TsMemProFav" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_mem_pro_fav e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.mem.TsMemProFav" resultMap="ListBaseResultMap">
+  	select e.*,
+  	p.name proName
+  	from tb_mem_pro_fav e 
+  	left join tb_pro_base p on e.product_id=e.id
+  	where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.mem.TsMemProFav" resultType="java.lang.Boolean">
+    select case when
+	exists(select 0 from tb_mem_pro_fav e where 
+	    <include refid="query_exist_condition" />
+	) then 1
+	else 0
+	end as exists_record from dual
+  </select>
+</mapper>

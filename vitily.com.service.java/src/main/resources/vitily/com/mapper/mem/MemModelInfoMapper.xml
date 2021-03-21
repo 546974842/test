@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.mem.MemModelInfoMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemModelInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="invest_code" property="investCode" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="VARCHAR" />
+    <result column="occupation" property="occupation" jdbcType="VARCHAR" />
+    <result column="style" property="style" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="VARCHAR" />
+    <result column="tool" property="tool" jdbcType="VARCHAR" />
+    <result column="give" property="give" jdbcType="VARCHAR" />
+    <result column="credit" property="credit" jdbcType="VARCHAR" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="tq_value" property="tqValue" jdbcType="VARCHAR" />
+    <result column="tb_credit" property="tbCredit" jdbcType="VARCHAR" />
+    <result column="id_img" property="idImg" jdbcType="VARCHAR" />
+    <result column="pic_img" property="picImg" jdbcType="VARCHAR" />
+    <result column="one_img" property="oneImg" jdbcType="VARCHAR" />
+    <result column="two_img" property="twoImg" jdbcType="VARCHAR" />
+    <result column="three_img" property="threeImg" jdbcType="VARCHAR" />
+    <result column="like_num" property="likeNum" jdbcType="INTEGER" />
+    <result column="dislike_num" property="dislikeNum" jdbcType="INTEGER" />
+    <result column="look_num" property="lookNum" jdbcType="INTEGER" />
+    <result column="colles_num" property="collesNum" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="vitily.com.tv_entity.mem.TvMemModelInfo" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="vitily.com.tv_entity.mem.TvMemModelInfo" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`member_id`, e.`is_recommend`, e.`status`, e.`invest_code`, e.`name`, e.`sex`, 
+    e.`age`, e.`city`, e.`height`, e.`weight`, e.`occupation`, e.`style`, e.`price`, 
+    e.`tool`, e.`give`, e.`credit`, e.`contact`, e.`tq_value`, e.`tb_credit`, e.`id_img`, 
+    e.`pic_img`, e.`one_img`, e.`two_img`, e.`three_img`, e.`like_num`, e.`dislike_num`, 
+    e.`look_num`, e.`colles_num`, e.`create_date`, e.`update_date`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.memberId != null and entity.memberId != ''">
+        and e.member_id = #{entity.memberId}
+      </if>
+    </if>
+    <!-- ts -->
+    <if test="selName != null and selName != ''">
+      and e.contact = #{selName,jdbcType=VARCHAR}
+    </if>
+    <if test="experiencedAndHotSellerId != null">
+      and (
+      EXISTS (select 0 from tb_order_form_show fs INNER join tb_show_base sb on sb.id=fs.show_id where fs.member_id=e.member_id and sb.member_id=#{experiencedAndHotSellerId})
+      OR
+      EXISTS (select 0 from tb_mem_model_hot where mode_id = e.member_id and member_id = #{experiencedAndHotSellerId})
+      )
+    </if>
+  </sql>
+  <sql id="exist_condition" >
+    <if test="entity != null" >
+      (1=0
+      )
+      <if test="entity.id != null" >
+        and e.`id` != #{entity.id,jdbcType=INTEGER}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_model_info e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemModelInfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_model_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="isRecommend != null" >
+        `is_recommend`,
+      </if>
+      <if test="status != null" >
+        `status`,
+      </if>
+      <if test="investCode != null" >
+        `invest_code`,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="sex != null" >
+        `sex`,
+      </if>
+      <if test="age != null" >
+        `age`,
+      </if>
+      <if test="city != null" >
+        `city`,
+      </if>
+      <if test="height != null" >
+        `height`,
+      </if>
+      <if test="weight != null" >
+        `weight`,
+      </if>
+      <if test="occupation != null" >
+        `occupation`,
+      </if>
+      <if test="style != null" >
+        `style`,
+      </if>
+      <if test="price != null" >
+        `price`,
+      </if>
+      <if test="tool != null" >
+        `tool`,
+      </if>
+      <if test="give != null" >
+        `give`,
+      </if>
+      <if test="credit != null" >
+        `credit`,
+      </if>
+      <if test="contact != null" >
+        `contact`,
+      </if>
+      <if test="tqValue != null" >
+        `tq_value`,
+      </if>
+      <if test="tbCredit != null" >
+        `tb_credit`,
+      </if>
+      <if test="idImg != null" >
+        `id_img`,
+      </if>
+      <if test="picImg != null" >
+        `pic_img`,
+      </if>
+      <if test="oneImg != null" >
+        `one_img`,
+      </if>
+      <if test="twoImg != null" >
+        `two_img`,
+      </if>
+      <if test="threeImg != null" >
+        `three_img`,
+      </if>
+      <if test="likeNum != null" >
+        `like_num`,
+      </if>
+      <if test="dislikeNum != null" >
+        `dislike_num`,
+      </if>
+      <if test="lookNum != null" >
+        `look_num`,
+      </if>
+      <if test="collesNum != null" >
+        `colles_num`,
+      </if>
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="isRecommend != null" >
+        #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="investCode != null" >
+        #{investCode,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null" >
+        #{occupation,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null" >
+        #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="tool != null" >
+        #{tool,jdbcType=VARCHAR},
+      </if>
+      <if test="give != null" >
+        #{give,jdbcType=VARCHAR},
+      </if>
+      <if test="credit != null" >
+        #{credit,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="tqValue != null" >
+        #{tqValue,jdbcType=VARCHAR},
+      </if>
+      <if test="tbCredit != null" >
+        #{tbCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="idImg != null" >
+        #{idImg,jdbcType=VARCHAR},
+      </if>
+      <if test="picImg != null" >
+        #{picImg,jdbcType=VARCHAR},
+      </if>
+      <if test="oneImg != null" >
+        #{oneImg,jdbcType=VARCHAR},
+      </if>
+      <if test="twoImg != null" >
+        #{twoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="threeImg != null" >
+        #{threeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="likeNum != null" >
+        #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="dislikeNum != null" >
+        #{dislikeNum,jdbcType=INTEGER},
+      </if>
+      <if test="lookNum != null" >
+        #{lookNum,jdbcType=INTEGER},
+      </if>
+      <if test="collesNum != null" >
+        #{collesNum,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemModelInfo" >
+    update tb_mem_model_info
+    <set >
+      <if test="memberId != null" >
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="isRecommend != null" >
+        `is_recommend` = #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="investCode != null" >
+        `invest_code` = #{investCode,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        `sex` = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        `age` = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        `city` = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        `height` = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        `weight` = #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null" >
+        `occupation` = #{occupation,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null" >
+        `style` = #{style,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        `price` = #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="tool != null" >
+        `tool` = #{tool,jdbcType=VARCHAR},
+      </if>
+      <if test="give != null" >
+        `give` = #{give,jdbcType=VARCHAR},
+      </if>
+      <if test="credit != null" >
+        `credit` = #{credit,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        `contact` = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="tqValue != null" >
+        `tq_value` = #{tqValue,jdbcType=VARCHAR},
+      </if>
+      <if test="tbCredit != null" >
+        `tb_credit` = #{tbCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="idImg != null" >
+        `id_img` = #{idImg,jdbcType=VARCHAR},
+      </if>
+      <if test="picImg != null" >
+        `pic_img` = #{picImg,jdbcType=VARCHAR},
+      </if>
+      <if test="oneImg != null" >
+        `one_img` = #{oneImg,jdbcType=VARCHAR},
+      </if>
+      <if test="twoImg != null" >
+        `two_img` = #{twoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="threeImg != null" >
+        `three_img` = #{threeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="likeNum != null" >
+        `like_num` = #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="dislikeNum != null" >
+        `dislike_num` = #{dislikeNum,jdbcType=INTEGER},
+      </if>
+      <if test="lookNum != null" >
+        `look_num` = #{lookNum,jdbcType=INTEGER},
+      </if>
+      <if test="collesNum != null" >
+        `colles_num` = #{collesNum,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_model_info e
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="ViewResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" resultMap="BaseResultMap" parameterType="vitily.com.ts_entity.mem.TsMemModelInfo" >
+    select 
+    <include refid="Base_Column_List" />
+     from tb_mem_model_info e where 1=1 
+    <include refid="query_condition" />
+     order by e.`id` desc limit 1
+  </select>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="vitily.com.ts_entity.mem.TsMemModelInfo" >
+    select count(1) as recordCount from tb_mem_model_info e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="vitily.com.ts_entity.mem.TsMemModelInfo" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="null != pageInfo" >
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''" >
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="selectSingleByBean" resultMap="BaseResultMap" parameterType="vitily.com.ts_entity.mem.TsMemModelInfo">
+    select
+    <include refid="Base_Column_List" />
+    from tb_mem_model_info e
+    where 1=1
+    <include refid="query_condition" />
+    limit 1;
+  </select>
+  <select id="isExists" resultType="java.lang.Boolean" parameterType="vitily.com.ts_entity.mem.TsMemModelInfo" >
+    select case when exists(select 0 from tb_mem_model_info e where
+    <include refid="exist_condition" />
+    ) then 1 else 0 end as exists_record from dual
+  </select>
+</mapper>

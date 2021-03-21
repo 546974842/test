@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.adm.AdmMsgMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.adm.TbAdmMsg" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="to_adm_user_id" property="toAdmUserId" jdbcType="INTEGER" />
+    <result column="from_adm_user_id" property="fromAdmUserId" jdbcType="INTEGER" />
+    <result column="from_member_id" property="fromMemberId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="label_ids" property="labelIds" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.adm.TvAdmMsg" extends="BaseResultMap" >
+    <result column="labelNames" property="labelNames" jdbcType="VARCHAR" />
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+    <result column="toAdmUserName" property="toAdmUserName" jdbcType="VARCHAR" />
+    <result column="fromAdmUserName" property="fromAdmUserName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.adm.TvAdmMsg" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`type_id`, e.`to_adm_user_id`,
+    e.`from_adm_user_id`, e.`from_member_id`, e.`title`, e.`content`, e.`label_ids`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.typeId != null" >
+        and e.type_id = #{entity.typeId}
+      </if>
+      <if test="entity.toAdmUserId != null" >
+        and e.to_adm_user_id = #{entity.toAdmUserId}
+      </if>
+      <if test="entity.fromAdmUserId != null" >
+        and e.from_adm_user_id = #{entity.fromAdmUserId}
+      </if>
+      <if test="entity.fromMemberId != null" >
+        and e.from_member_id = #{entity.fromMemberId}
+      </if>
+      <if test="entity.title != null and entity.title != ''" >
+        and e.title = #{entity.title}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+    <!-- ts -->
+    <if test="selTitle != null and selTitle != ''">
+      and e.title like concat('%',#{selTitle,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="selLabelId != null and selLabelId != ''">
+      and e.label_ids like concat('%',#{selLabelId,jdbcType=VARCHAR},'%')
+    </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_msg
+    where `id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="vitily.com.tb_entity.adm.TbAdmMsg" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_adm_msg (`create_date`, `update_date`, `deltag`, 
+      `state`, `type_id`, `to_adm_user_id`, 
+      `from_adm_user_id`, `from_member_id`, `title`, 
+      `content`, `label_ids`)
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{typeId,jdbcType=INTEGER}, #{toAdmUserId,jdbcType=INTEGER}, 
+      #{fromAdmUserId,jdbcType=INTEGER}, #{fromMemberId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{labelIds,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.adm.TbAdmMsg" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_adm_msg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="typeId != null" >
+        `type_id`,
+      </if>
+      <if test="toAdmUserId != null" >
+        `to_adm_user_id`,
+      </if>
+      <if test="fromAdmUserId != null" >
+        `from_adm_user_id`,
+      </if>
+      <if test="fromMemberId != null" >
+        `from_member_id`,
+      </if>
+      <if test="title != null" >
+        `title`,
+      </if>
+      <if test="content != null" >
+        `content`,
+      </if>
+      <if test="labelIds != null" >
+        `label_ids`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="toAdmUserId != null" >
+        #{toAdmUserId,jdbcType=INTEGER},
+      </if>
+      <if test="fromAdmUserId != null" >
+        #{fromAdmUserId,jdbcType=INTEGER},
+      </if>
+      <if test="fromMemberId != null" >
+        #{fromMemberId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="labelIds != null" >
+        #{labelIds,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.adm.TbAdmMsg" >
+    update tb_adm_msg
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        `type_id` = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="toAdmUserId != null" >
+        `to_adm_user_id` = #{toAdmUserId,jdbcType=INTEGER},
+      </if>
+      <if test="fromAdmUserId != null" >
+        `from_adm_user_id` = #{fromAdmUserId,jdbcType=INTEGER},
+      </if>
+      <if test="fromMemberId != null" >
+        `from_member_id` = #{fromMemberId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        `title` = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        `content` = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="labelIds != null" >
+        `label_ids` = #{labelIds,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.adm.TbAdmMsg" >
+    update tb_adm_msg
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `type_id` = #{typeId,jdbcType=INTEGER},	
+      `to_adm_user_id` = #{toAdmUserId,jdbcType=INTEGER},
+      `from_adm_user_id` = #{fromAdmUserId,jdbcType=INTEGER},
+      `from_member_id` = #{fromMemberId,jdbcType=INTEGER},
+      `title` = #{title,jdbcType=VARCHAR},
+      `content` = #{content,jdbcType=VARCHAR},
+      `label_ids` = #{labelIds,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insertByQueryMember" parameterType="vitily.com.ts_entity.adm.TsAdmMsg">
+    insert into tb_adm_msg (`create_date`,`deltag`,
+    `state`, `type_id`, `to_adm_user_id`,
+    `from_adm_user_id`, `from_member_id`, `title`,
+    `content`, `label_ids`)
+    select #{entity.createDate},0,#{entity.state},#{entity.typeId},#{entity.toAdmUserId},
+    #{entity.fromAdmUserId},mb.id,#{entity.title},
+    #{entity.content},#{entity.labelIds} from tb_mem_base mb where 1=1
+    <if test="memGroupId != null" >
+      and group_id=#{memGroupId}
+    </if>
+      and deltag=0 and state = 1
+  </insert>
+
+  <sql id="select_for_list_tv">
+    select e.*,
+    ta.user_name toAdmUserName,
+    fa.user_name fromAdmUserName,
+    fm.name memName,
+    case when fm.type = 0 then (select real_name from tb_mem_personal_userinfo where member_id=fm.id)
+    else (select company_name from tb_mem_company_userinfo where member_id=fm.id) end memRealName,
+    (select group_concat(name)from tb_comm_label where concat(',',e.label_ids,',') like concat('%,',id,',%')) labelNames
+    from tb_adm_msg e
+    left join tb_adm_user ta on ta.id=e.to_adm_user_id
+    left join tb_adm_user fa on fa.id=e.from_adm_user_id
+    left join tb_mem_base fm on fm.id=e.from_member_id
+  </sql>
+  <select id="selectByPrimaryKeyForTv" parameterType="java.lang.Integer" resultMap="TvResultMap">
+    <include refid="select_for_list_tv" />
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.adm.TsAdmMsg" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_adm_msg e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.adm.TsAdmMsg" resultMap="ListBaseResultMap">
+    <include refid="select_for_list_tv" />
+    where 1=1
+    <include refid="query_condition" />
+    <include refid="vitily.com.mapper.comm.CommonMapper.page_info_id_instanceof_sort" />
+  </select>
+</mapper>

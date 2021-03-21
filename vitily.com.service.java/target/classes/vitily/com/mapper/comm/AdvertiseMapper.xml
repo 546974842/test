@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.comm.AdvertiseMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.comm.TbAdvertise" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="news_id" property="newsId" jdbcType="INTEGER" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="file_url" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="img_sam_url" property="imgSamUrl" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.comm.TvAdvertise" extends="BaseResultMap" >
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.comm.TvAdvertise" extends="ListBaseResultMap" >
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, 
+    e.`news_id`, e.`type_id`, e.`file_url`, e.`img_sam_url`, e.`title`, 
+    e.`content`, e.`link`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.typeId != null" >
+        and e.type_id = #{entity.typeId}
+      </if>
+      <if test="entity.title != null and entity.title != ''" >
+        and e.title = #{entity.title}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+      <if test="typeIdStr != null and typeIdStr != ''">
+        and e.type_id in(${typeIdStr})
+      </if>
+      <if test="selTitle != null and selTitle != ''">
+      	and e.title like concat('%',#{selTitle,jdbcType=VARCHAR},'%')
+      </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_comm_advertise e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_comm_advertise
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.comm.TbAdvertise" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_comm_advertise (`create_date`, `update_date`, `deltag`, 
+      `state`, `sort`, `news_id`, 
+      `type_id`, `file_url`, `img_sam_url`, 
+      `title`, `content`, `link`
+      )
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{sort,jdbcType=DECIMAL}, #{newsId,jdbcType=INTEGER}, 
+      #{typeId,jdbcType=INTEGER}, #{fileUrl,jdbcType=VARCHAR}, #{imgSamUrl,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.comm.TbAdvertise" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_comm_advertise
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="newsId != null" >
+        `news_id`,
+      </if>
+      <if test="typeId != null" >
+        `type_id`,
+      </if>
+      <if test="fileUrl != null" >
+        `file_url`,
+      </if>
+      <if test="imgSamUrl != null" >
+        `img_sam_url`,
+      </if>
+      <if test="title != null" >
+        `title`,
+      </if>
+      <if test="content != null" >
+        `content`,
+      </if>
+      <if test="link != null" >
+        `link`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="newsId != null" >
+        #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="fileUrl != null" >
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgSamUrl != null" >
+        #{imgSamUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null" >
+        #{link,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.comm.TbAdvertise" >
+    update tb_comm_advertise
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="newsId != null" >
+        `news_id` = #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        `type_id` = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="fileUrl != null" >
+        `file_url` = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgSamUrl != null" >
+        `img_sam_url` = #{imgSamUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        `title` = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        `content` = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null" >
+        `link` = #{link,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.comm.TbAdvertise" >
+    update tb_comm_advertise
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `news_id` = #{newsId,jdbcType=INTEGER},
+      `type_id` = #{typeId,jdbcType=INTEGER},
+      `file_url` = #{fileUrl,jdbcType=VARCHAR},
+      `img_sam_url` = #{imgSamUrl,jdbcType=VARCHAR},
+      `title` = #{title,jdbcType=VARCHAR},
+      `content` = #{content,jdbcType=VARCHAR},
+      `link` = #{link,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,t.name as typeName
+    from tb_comm_advertise e
+    left join tb_comm_type t on t.id = e.type_id
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.comm.TsAdvertise" resultMap="BaseResultMap">
+    select e.* from tb_comm_advertise e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.comm.TsAdvertise" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_comm_advertise e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.comm.TsAdvertise" resultMap="ListBaseResultMap">
+  	select e.*,
+  	t.name as typeName
+  	from tb_comm_advertise e
+  	left join tb_comm_type t on t.id = e.type_id
+  	 where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

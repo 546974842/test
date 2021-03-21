@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.mem.MemCommissionFlowMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemCommissionFlow" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="available_balance" property="availableBalance" jdbcType="DECIMAL" />
+    <result column="freeze_balance" property="freezeBalance" jdbcType="DECIMAL" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="funds_type" property="fundsType" jdbcType="INTEGER" />
+    <result column="relation_id" property="relationId" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="direction" property="direction" jdbcType="TINYINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="vitily.com.tv_entity.mem.TvMemCommissionFlow" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="vitily.com.tv_entity.mem.TvMemCommissionFlow" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`deltag`, e.`member_id`, e.`amount`, e.`available_balance`, 
+    e.`freeze_balance`, e.`memo`, e.`funds_type`, e.`relation_id`, e.`remark`, e.`direction`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId}
+      </if>
+    </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <sql id="exist_condition" >
+    <if test="entity != null" >
+      (1=0
+      )
+      <if test="entity.id != null" >
+        and e.`id` != #{entity.id,jdbcType=INTEGER}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_commission_flow e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="vitily.com.tb_entity.mem.TbMemCommissionFlow" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_commission_flow (`create_date`, `deltag`, `member_id`, 
+      `amount`, `available_balance`, `freeze_balance`, 
+      `memo`, `funds_type`, `relation_id`, 
+      `remark`, `direction`)
+    values (#{createDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, 
+      #{amount,jdbcType=DECIMAL}, #{availableBalance,jdbcType=DECIMAL}, #{freezeBalance,jdbcType=DECIMAL}, 
+      #{memo,jdbcType=VARCHAR}, #{fundsType,jdbcType=INTEGER}, #{relationId,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{direction,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemCommissionFlow" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_commission_flow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="amount != null" >
+        `amount`,
+      </if>
+      <if test="availableBalance != null" >
+        `available_balance`,
+      </if>
+      <if test="freezeBalance != null" >
+        `freeze_balance`,
+      </if>
+      <if test="memo != null" >
+        `memo`,
+      </if>
+      <if test="fundsType != null" >
+        `funds_type`,
+      </if>
+      <if test="relationId != null" >
+        `relation_id`,
+      </if>
+      <if test="remark != null" >
+        `remark`,
+      </if>
+      <if test="direction != null" >
+        `direction`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="availableBalance != null" >
+        #{availableBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="freezeBalance != null" >
+        #{freezeBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="fundsType != null" >
+        #{fundsType,jdbcType=INTEGER},
+      </if>
+      <if test="relationId != null" >
+        #{relationId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null" >
+        #{direction,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemCommissionFlow" >
+    update tb_mem_commission_flow
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        `amount` = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="availableBalance != null" >
+        `available_balance` = #{availableBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="freezeBalance != null" >
+        `freeze_balance` = #{freezeBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="memo != null" >
+        `memo` = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="fundsType != null" >
+        `funds_type` = #{fundsType,jdbcType=INTEGER},
+      </if>
+      <if test="relationId != null" >
+        `relation_id` = #{relationId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        `remark` = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null" >
+        `direction` = #{direction,jdbcType=TINYINT},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.mem.TbMemCommissionFlow" >
+    update tb_mem_commission_flow
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `member_id` = #{memberId,jdbcType=INTEGER},
+      `amount` = #{amount,jdbcType=DECIMAL},
+      `available_balance` = #{availableBalance,jdbcType=DECIMAL},
+      `freeze_balance` = #{freezeBalance,jdbcType=DECIMAL},
+      `memo` = #{memo,jdbcType=VARCHAR},
+      `funds_type` = #{fundsType,jdbcType=INTEGER},
+      `relation_id` = #{relationId,jdbcType=INTEGER},
+      `remark` = #{remark,jdbcType=VARCHAR},
+      `direction` = #{direction,jdbcType=TINYINT}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_commission_flow e
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="ViewResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" resultMap="BaseResultMap" parameterType="vitily.com.ts_entity.mem.TsMemCommissionFlow" >
+    select 
+    <include refid="Base_Column_List" />
+     from tb_mem_commission_flow e where 1=1 
+    <include refid="query_condition" />
+     order by e.`id` desc limit 1
+  </select>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="vitily.com.ts_entity.mem.TsMemCommissionFlow" >
+    select count(1) as recordCount from tb_mem_commission_flow e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="vitily.com.ts_entity.mem.TsMemCommissionFlow" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="null != pageInfo" >
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''" >
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" resultType="java.lang.Boolean" parameterType="vitily.com.ts_entity.mem.TsMemCommissionFlow" >
+    select case when exists(select 0 from tb_mem_commission_flow e where
+    <include refid="exist_condition" />
+    ) then 1 else 0 end as exists_record from dual
+  </select>
+</mapper>

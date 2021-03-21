@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vitily.com.mapper.mem.MemRecInfoMapper">
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemRecInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="deltag" jdbcType="INTEGER" property="deltag" />
+    <result column="sort" jdbcType="DECIMAL" property="sort" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="post_code" jdbcType="VARCHAR" property="postCode" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="call" jdbcType="VARCHAR" property="call" />
+    <result column="is_default" jdbcType="INTEGER" property="isDefault" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.mem.TvMemRecInfo" extends="BaseResultMap" >
+    <result column="memName" property="memName" jdbcType="VARCHAR" />
+    <result column="memRealName" property="memRealName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.mem.TvMemRecInfo" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List">
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`sort`, e.`state`,
+    `member_id`, `receiver`, `country`, e.`province`, e.`city`, 
+    e.`area`, e.`address`, e.`post_code`, e.`phone`, e.`call`, 
+    e.`is_default`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId}
+      </if>
+      <if test="entity.isDefault != null" >
+        and e.is_default = #{entity.isDefault,jdbcType=INTEGER}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+    <if test="selReceiver != null and selReceiver != ''" >
+      and e.receiver like concat('%',#{selReceiver,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="selAddress != null and selAddress != ''" >
+      and (e.address like concat('%',#{selAddress,jdbcType=VARCHAR},'%')
+          or e.province like concat('%',#{selAddress,jdbcType=VARCHAR},'%')
+          or e.city like concat('%',#{selAddress,jdbcType=VARCHAR},'%')
+          or e.area like concat('%',#{selAddress,jdbcType=VARCHAR},'%')
+          )
+    </if>
+    <if test="selPhoneCall != null and selPhoneCall != ''" >
+      and (
+        e.phone like concat('%',#{selPhoneCall,jdbcType=VARCHAR},'%')
+        or
+        e.call like concat('%',#{selPhoneCall,jdbcType=VARCHAR},'%')
+      )
+    </if>
+    <if test="defaultStr != null and defaultStr != ''">
+      and e.is_default in(${defaultStr})
+    </if>
+
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <sql id="query_exist_condition">
+  	(1=0
+    <if test="null != entity">
+      <if test="entity.memberId != null" >
+        or (
+        	e.member_id = #{entity.memberId,jdbcType=INTEGER}
+        	and 
+        	e.receiver=#{entity.receiver,jdbcType=VARCHAR}
+        	and 
+        	e.country=#{entity.country,jdbcType=VARCHAR}
+        	and 
+        	e.province=#{entity.province,jdbcType=VARCHAR}
+        	and 
+        	e.city=#{entity.city,jdbcType=VARCHAR}
+        	and 
+        	e.area=#{entity.area,jdbcType=VARCHAR}
+        	and 
+        	e.phone=#{entity.phone,jdbcType=VARCHAR}
+           )
+      </if>
+    </if>
+      )
+    <if test="null !=entity and null != entity.id">
+      and e.id != #{entity.id,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_rec_info e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_mem_rec_info
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.mem.TbMemRecInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_rec_info (`create_date`, `update_date`, `deltag`, 
+      `sort`, `member_id`, `receiver`, 
+      `country`, `province`, `city`, 
+      `area`, `address`, `post_code`, 
+      `phone`, `call`, `is_default`, 
+      `state`)
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{sort,jdbcType=DECIMAL}, #{memberId,jdbcType=INTEGER}, #{receiver,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{call,jdbcType=VARCHAR}, #{isDefault,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemRecInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_rec_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        `create_date`,
+      </if>
+      <if test="updateDate != null">
+        `update_date`,
+      </if>
+      <if test="deltag != null">
+        `deltag`,
+      </if>
+      <if test="sort != null">
+        `sort`,
+      </if>
+      <if test="memberId != null">
+        `member_id`,
+      </if>
+      <if test="receiver != null">
+        `receiver`,
+      </if>
+      <if test="country != null">
+        `country`,
+      </if>
+      <if test="province != null">
+        `province`,
+      </if>
+      <if test="city != null">
+        `city`,
+      </if>
+      <if test="area != null">
+        `area`,
+      </if>
+      <if test="address != null">
+        `address`,
+      </if>
+      <if test="postCode != null">
+        `post_code`,
+      </if>
+      <if test="phone != null">
+        `phone`,
+      </if>
+      <if test="call != null">
+        `call`,
+      </if>
+      <if test="isDefault != null">
+        `is_default`,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null">
+        #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="call != null">
+        #{call,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemRecInfo">
+    update tb_mem_rec_info
+    <set>
+      <if test="createDate != null">
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null">
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="receiver != null">
+        `receiver` = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        `country` = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        `province` = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        `city` = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        `area` = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        `address` = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null">
+        `post_code` = #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        `phone` = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="call != null">
+        `call` = #{call,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        `is_default` = #{isDefault,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.mem.TbMemRecInfo">
+    update tb_mem_rec_info
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `member_id` = #{memberId,jdbcType=INTEGER},
+      `receiver` = #{receiver,jdbcType=VARCHAR},
+      `country` = #{country,jdbcType=VARCHAR},
+      `province` = #{province,jdbcType=VARCHAR},
+      `city` = #{city,jdbcType=VARCHAR},
+      `area` = #{area,jdbcType=VARCHAR},
+      `address` = #{address,jdbcType=VARCHAR},
+      `post_code` = #{postCode,jdbcType=VARCHAR},
+      `phone` = #{phone,jdbcType=VARCHAR},
+      `call` = #{call,jdbcType=VARCHAR},
+      `is_default` = #{isDefault,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <update id="updateByTs" parameterType="vitily.com.ts_entity.mem.TsMemRecInfo">
+    update tb_mem_rec_info
+    <set>
+      <if test="entity.updateDate != null">
+        `update_date` = #{entity.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entity.deltag != null">
+        `deltag` = #{entity.deltag,jdbcType=INTEGER},
+      </if>
+      <if test="entity.sort != null">
+        `sort` = #{entity.sort,jdbcType=DECIMAL},
+      </if>
+      <if test="entity.receiver != null">
+        `receiver` = #{entity.receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.country != null">
+        `country` = #{entity.country,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.province != null">
+        `province` = #{entity.province,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.city != null">
+        `city` = #{entity.city,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.area != null">
+        `area` = #{entity.area,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.address != null">
+        `address` = #{entity.address,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.postCode != null">
+        `post_code` = #{entity.postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.phone != null">
+        `phone` = #{entity.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.call != null">
+        `call` = #{entity.call,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.isDefault != null">
+        `is_default` = #{entity.isDefault,jdbcType=INTEGER},
+      </if>
+      <if test="entity.state != null">
+        `state` = #{entity.state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where member_id = #{entity.memberId}
+  </update>
+
+  <sql id="select_for_list_tv">
+    select
+    e.*,
+    m.name memName,
+    case when m.type = 0 then (select real_name from tb_mem_personal_userinfo where member_id=m.id)
+    else (select company_name from tb_mem_company_userinfo where member_id=m.id) end memRealName
+    from tb_mem_rec_info e
+    left join tb_mem_base m on m.id=e.member_id
+    where 1=1
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    and e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.mem.TsMemRecInfo" resultMap="BaseResultMap">
+    select e.* from tb_mem_rec_info e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.mem.TsMemRecInfo" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_mem_rec_info e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.mem.TsMemRecInfo" resultMap="ListBaseResultMap">
+    <include refid="select_for_list_tv" />
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.mem.TsMemRecInfo" resultType="java.lang.Boolean">
+    select case when
+	exists(select 0 from tb_mem_rec_info e where 
+	    <include refid="query_exist_condition" />
+	) then 1
+	else 0
+	end as exists_record from dual
+  </select>
+</mapper>

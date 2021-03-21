@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.mem.MemPersonalCreditfileMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemPersonalCreditfile" >
+    <id column="member_id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="education_level" property="educationLevel" jdbcType="INTEGER" />
+    <result column="graduated_school" property="graduatedSchool" jdbcType="VARCHAR" />
+    <result column="education_certify_urls" property="educationCertifyUrls" jdbcType="VARCHAR" />
+    <result column="education_certify_state" property="educationCertifyState" jdbcType="TINYINT" />
+    <result column="discipline_info" property="disciplineInfo" jdbcType="VARCHAR" />
+    <result column="jobs_years" property="jobsYears" jdbcType="TINYINT" />
+    <result column="technical_titles" property="technicalTitles" jdbcType="VARCHAR" />
+    <result column="jobs_certify_urls" property="jobsCertifyUrls" jdbcType="VARCHAR" />
+    <result column="jobs_certify_state" property="jobsCertifyState" jdbcType="TINYINT" />
+    <result column="jobs_info" property="jobsInfo" jdbcType="VARCHAR" />
+    <result column="driver_license" property="driverLicense" jdbcType="VARCHAR" />
+    <result column="driver_license_certify_urls" property="driverLicenseCertifyUrls" jdbcType="VARCHAR" />
+    <result column="driver_license_certify_state" property="driverLicenseCertifyState" jdbcType="TINYINT" />
+    <result column="car_info" property="carInfo" jdbcType="VARCHAR" />
+    <result column="car_certify_urls" property="carCertifyUrls" jdbcType="VARCHAR" />
+    <result column="car_certify_state" property="carCertifyState" jdbcType="TINYINT" />
+    <result column="estate_info" property="estateInfo" jdbcType="VARCHAR" />
+    <result column="estate_certify_urls" property="estateCertifyUrls" jdbcType="VARCHAR" />
+    <result column="estate_certify_state" property="estateCertifyState" jdbcType="TINYINT" />
+    <result column="stock_fund" property="stockFund" jdbcType="VARCHAR" />
+    <result column="stock_fund_certify_urls" property="stockFundCertifyUrls" jdbcType="VARCHAR" />
+    <result column="stock_fund_certify_state" property="stockFundCertifyState" jdbcType="TINYINT" />
+    <result column="other_info" property="otherInfo" jdbcType="VARCHAR" />
+    <result column="other_info_certify_urls" property="otherInfoCertifyUrls" jdbcType="VARCHAR" />
+    <result column="other_info_certify_state" property="otherInfoCertifyState" jdbcType="TINYINT" />
+    <result column="credit_points" property="creditPoints" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.mem.TvMemPersonalCreditfile" extends="BaseResultMap" >
+    <result column="memName" property="memName" jdbcType="VARCHAR" />
+    <result column="memRealName" property="memRealName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.mem.TvMemPersonalCreditfile" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`member_id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`,
+    e.`education_level`, e.`graduated_school`, e.`education_certify_urls`, e.`education_certify_state`, e.`discipline_info`,e.`jobs_years`,
+    e.`technical_titles`, e.`jobs_certify_urls`, e.`jobs_certify_state`,e.`jobs_info`, e.`driver_license`, e.`driver_license_certify_urls`,
+    e.`driver_license_certify_state`, e.`car_info`, e.`car_certify_urls`, e.`car_certify_state`, e.`estate_info`,
+    e.`estate_certify_urls`, e.`estate_certify_state`, e.`stock_fund`, e.`stock_fund_certify_urls`, e.`stock_fund_certify_state`,
+    e.`other_info`, e.`other_info_certify_urls`, e.`other_info_certify_state`, e.`credit_points`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId}
+      </if>
+      <if test="entity.educationCertifyState != null" >
+        and e.education_certify_state = #{entity.educationCertifyState}
+      </if>
+      <if test="entity.jobsCertifyState != null" >
+        and e.jobs_certify_state = #{entity.jobsCertifyState}
+      </if>
+      <if test="entity.driverLicenseCertifyState != null" >
+        and e.driver_license_certify_state = #{entity.driverLicenseCertifyState}
+      </if>
+      <if test="entity.carCertifyState != null" >
+        and e.car_certify_state = #{entity.carCertifyState}
+      </if>
+      <if test="entity.estateCertifyState != null" >
+        and e.estate_certify_state = #{entity.estateCertifyState}
+      </if>
+      <if test="entity.stockFundCertifyState != null" >
+        and e.stock_fund_certify_state = #{entity.stockFundCertifyState}
+      </if>
+      <if test="entity.otherInfoCertifyState != null" >
+        and e.other_info_certify_state = #{entity.otherInfoCertifyState}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+
+    <if test="beginCreditPoints != null">
+      <![CDATA[and e.credit_points >= #{beginCreditPoints}]]>
+    </if>
+    <if test="endCreditPoints != null">
+      <![CDATA[and e.credit_points <= #{endCreditPoints}]]>
+    </if>
+    <if test="stateStr != null and stateStr != ''">
+      and e.state in(${stateStr})
+    </if>
+
+  </sql>
+  <sql id="query_exist_condition">
+    e.member_id=#{entity.memberId}
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_personal_creditfile e
+    where `member_id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_mem_personal_creditfile
+    where `member_id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.mem.TbMemPersonalCreditfile" >
+    insert into tb_mem_personal_creditfile (`member_id`,`create_date`, `update_date`, `deltag`,
+      `state`, `education_level`, `graduated_school`, 
+      `education_certify_urls`, `education_certify_state`, `discipline_info`
+      `jobs_years`, `technical_titles`, `jobs_certify_urls`, 
+      `jobs_certify_state`, `jobs_info`,`driver_license`, `driver_license_certify_urls`,
+      `driver_license_certify_state`, `car_info`, `car_certify_urls`, 
+      `car_certify_state`, `estate_info`, `estate_certify_urls`, 
+      `estate_certify_state`, `stock_fund`, `stock_fund_certify_urls`, 
+      `stock_fund_certify_state`, `other_info`, `other_info_certify_urls`, 
+      `other_info_certify_state`, `credit_points`)
+    values (#{memberId,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER},
+      #{state,jdbcType=INTEGER}, #{educationLevel,jdbcType=INTEGER}, #{graduatedSchool,jdbcType=VARCHAR}, 
+      #{educationCertifyUrls,jdbcType=VARCHAR}, #{educationCertifyState,jdbcType=TINYINT},#{disciplineInfo,jdbcType=VARCHAR},
+      #{jobsYears,jdbcType=TINYINT}, #{technicalTitles,jdbcType=VARCHAR}, #{jobsCertifyUrls,jdbcType=VARCHAR}, 
+      #{jobsCertifyState,jdbcType=TINYINT}, #{jobsInfo,jdbcType=VARCHAR}, #{driverLicense,jdbcType=VARCHAR}, #{driverLicenseCertifyUrls,jdbcType=VARCHAR},
+      #{driverLicenseCertifyState,jdbcType=TINYINT}, #{carInfo,jdbcType=VARCHAR}, #{carCertifyUrls,jdbcType=VARCHAR}, 
+      #{carCertifyState,jdbcType=TINYINT}, #{estateInfo,jdbcType=VARCHAR}, #{estateCertifyUrls,jdbcType=VARCHAR}, 
+      #{estateCertifyState,jdbcType=TINYINT}, #{stockFund,jdbcType=VARCHAR}, #{stockFundCertifyUrls,jdbcType=VARCHAR}, 
+      #{stockFundCertifyState,jdbcType=TINYINT}, #{otherInfo,jdbcType=VARCHAR}, #{otherInfoCertifyUrls,jdbcType=VARCHAR}, 
+      #{otherInfoCertifyState,jdbcType=TINYINT}, #{creditPoints,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemPersonalCreditfile" >
+    insert into tb_mem_personal_creditfile
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="educationLevel != null" >
+        `education_level`,
+      </if>
+      <if test="graduatedSchool != null" >
+        `graduated_school`,
+      </if>
+      <if test="educationCertifyUrls != null" >
+        `education_certify_urls`,
+      </if>
+      <if test="educationCertifyState != null" >
+        `education_certify_state`,
+      </if>
+      <if test="disciplineInfo != null" >
+        `discipline_info`,
+      </if>
+      <if test="jobsYears != null" >
+        `jobs_years`,
+      </if>
+      <if test="technicalTitles != null" >
+        `technical_titles`,
+      </if>
+      <if test="jobsCertifyUrls != null" >
+        `jobs_certify_urls`,
+      </if>
+      <if test="jobsCertifyState != null" >
+        `jobs_certify_state`,
+      </if>
+      <if test="jobsInfo != null" >
+        `jobs_info`,
+      </if>
+      <if test="driverLicense != null" >
+        `driver_license`,
+      </if>
+      <if test="driverLicenseCertifyUrls != null" >
+        `driver_license_certify_urls`,
+      </if>
+      <if test="driverLicenseCertifyState != null" >
+        `driver_license_certify_state`,
+      </if>
+      <if test="carInfo != null" >
+        `car_info`,
+      </if>
+      <if test="carCertifyUrls != null" >
+        `car_certify_urls`,
+      </if>
+      <if test="carCertifyState != null" >
+        `car_certify_state`,
+      </if>
+      <if test="estateInfo != null" >
+        `estate_info`,
+      </if>
+      <if test="estateCertifyUrls != null" >
+        `estate_certify_urls`,
+      </if>
+      <if test="estateCertifyState != null" >
+        `estate_certify_state`,
+      </if>
+      <if test="stockFund != null" >
+        `stock_fund`,
+      </if>
+      <if test="stockFundCertifyUrls != null" >
+        `stock_fund_certify_urls`,
+      </if>
+      <if test="stockFundCertifyState != null" >
+        `stock_fund_certify_state`,
+      </if>
+      <if test="otherInfo != null" >
+        `other_info`,
+      </if>
+      <if test="otherInfoCertifyUrls != null" >
+        `other_info_certify_urls`,
+      </if>
+      <if test="otherInfoCertifyState != null" >
+        `other_info_certify_state`,
+      </if>
+      <if test="creditPoints != null" >
+        `credit_points`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="educationLevel != null" >
+        #{educationLevel,jdbcType=INTEGER},
+      </if>
+      <if test="graduatedSchool != null" >
+        #{graduatedSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="educationCertifyUrls != null" >
+        #{educationCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="educationCertifyState != null" >
+        #{educationCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="disciplineInfo != null" >
+        #{disciplineInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="jobsYears != null" >
+        #{jobsYears,jdbcType=TINYINT},
+      </if>
+      <if test="technicalTitles != null" >
+        #{technicalTitles,jdbcType=VARCHAR},
+      </if>
+      <if test="jobsCertifyUrls != null" >
+        #{jobsCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="jobsCertifyState != null" >
+        #{jobsCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="jobsInfo != null" >
+        #{jobsInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="driverLicense != null" >
+        #{driverLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="driverLicenseCertifyUrls != null" >
+        #{driverLicenseCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="driverLicenseCertifyState != null" >
+        #{driverLicenseCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="carInfo != null" >
+        #{carInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="carCertifyUrls != null" >
+        #{carCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="carCertifyState != null" >
+        #{carCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="estateInfo != null" >
+        #{estateInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="estateCertifyUrls != null" >
+        #{estateCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="estateCertifyState != null" >
+        #{estateCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="stockFund != null" >
+        #{stockFund,jdbcType=VARCHAR},
+      </if>
+      <if test="stockFundCertifyUrls != null" >
+        #{stockFundCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="stockFundCertifyState != null" >
+        #{stockFundCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="otherInfo != null" >
+        #{otherInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="otherInfoCertifyUrls != null" >
+        #{otherInfoCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="otherInfoCertifyState != null" >
+        #{otherInfoCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="creditPoints != null" >
+        #{creditPoints,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemPersonalCreditfile" >
+    update tb_mem_personal_creditfile
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="educationLevel != null" >
+        `education_level` = #{educationLevel,jdbcType=INTEGER},
+      </if>
+      <if test="graduatedSchool != null" >
+        `graduated_school` = #{graduatedSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="educationCertifyUrls != null" >
+        `education_certify_urls` = #{educationCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="educationCertifyState != null" >
+        `education_certify_state` = #{educationCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="disciplineInfo != null" >
+        `discipline_info` = #{disciplineInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="jobsYears != null" >
+        `jobs_years` = #{jobsYears,jdbcType=TINYINT},
+      </if>
+      <if test="technicalTitles != null" >
+        `technical_titles` = #{technicalTitles,jdbcType=VARCHAR},
+      </if>
+      <if test="jobsCertifyUrls != null" >
+        `jobs_certify_urls` = #{jobsCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="jobsCertifyState != null" >
+        `jobs_certify_state` = #{jobsCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="jobsInfo != null" >
+        `jobs_info` = #{jobsInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="driverLicense != null" >
+        `driver_license` = #{driverLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="driverLicenseCertifyUrls != null" >
+        `driver_license_certify_urls` = #{driverLicenseCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="driverLicenseCertifyState != null" >
+        `driver_license_certify_state` = #{driverLicenseCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="carInfo != null" >
+        `car_info` = #{carInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="carCertifyUrls != null" >
+        `car_certify_urls` = #{carCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="carCertifyState != null" >
+        `car_certify_state` = #{carCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="estateInfo != null" >
+        `estate_info` = #{estateInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="estateCertifyUrls != null" >
+        `estate_certify_urls` = #{estateCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="estateCertifyState != null" >
+        `estate_certify_state` = #{estateCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="stockFund != null" >
+        `stock_fund` = #{stockFund,jdbcType=VARCHAR},
+      </if>
+      <if test="stockFundCertifyUrls != null" >
+        `stock_fund_certify_urls` = #{stockFundCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="stockFundCertifyState != null" >
+        `stock_fund_certify_state` = #{stockFundCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="otherInfo != null" >
+        `other_info` = #{otherInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="otherInfoCertifyUrls != null" >
+        `other_info_certify_urls` = #{otherInfoCertifyUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="otherInfoCertifyState != null" >
+        `other_info_certify_state` = #{otherInfoCertifyState,jdbcType=TINYINT},
+      </if>
+      <if test="creditPoints != null" >
+        `credit_points` = #{creditPoints,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `member_id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.mem.TbMemPersonalCreditfile" >
+    update tb_mem_personal_creditfile
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `education_level` = #{educationLevel,jdbcType=INTEGER},
+      `graduated_school` = #{graduatedSchool,jdbcType=VARCHAR},
+      `education_certify_urls` = #{educationCertifyUrls,jdbcType=VARCHAR},
+      `education_certify_state` = #{educationCertifyState,jdbcType=TINYINT},
+      `discipline_info` = #{disciplineInfo,jdbcType=VARCHAR},
+      `jobs_years` = #{jobsYears,jdbcType=TINYINT},
+      `technical_titles` = #{technicalTitles,jdbcType=VARCHAR},
+      `jobs_certify_urls` = #{jobsCertifyUrls,jdbcType=VARCHAR},
+      `jobs_certify_state` = #{jobsCertifyState,jdbcType=TINYINT},
+      `jobs_info` = #{jobsInfo,jdbcType=VARCHAR},
+      `driver_license` = #{driverLicense,jdbcType=VARCHAR},
+      `driver_license_certify_urls` = #{driverLicenseCertifyUrls,jdbcType=VARCHAR},
+      `driver_license_certify_state` = #{driverLicenseCertifyState,jdbcType=TINYINT},
+      `car_info` = #{carInfo,jdbcType=VARCHAR},
+      `car_certify_urls` = #{carCertifyUrls,jdbcType=VARCHAR},
+      `car_certify_state` = #{carCertifyState,jdbcType=TINYINT},
+      `estate_info` = #{estateInfo,jdbcType=VARCHAR},
+      `estate_certify_urls` = #{estateCertifyUrls,jdbcType=VARCHAR},
+      `estate_certify_state` = #{estateCertifyState,jdbcType=TINYINT},
+      `stock_fund` = #{stockFund,jdbcType=VARCHAR},
+      `stock_fund_certify_urls` = #{stockFundCertifyUrls,jdbcType=VARCHAR},
+      `stock_fund_certify_state` = #{stockFundCertifyState,jdbcType=TINYINT},
+      `other_info` = #{otherInfo,jdbcType=VARCHAR},
+      `other_info_certify_urls` = #{otherInfoCertifyUrls,jdbcType=VARCHAR},
+      `other_info_certify_state` = #{otherInfoCertifyState,jdbcType=TINYINT},
+      `credit_points` = #{creditPoints,jdbcType=INTEGER}
+    where `member_id` = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="select_for_list_tv">
+    select
+    e.*,
+    m.name memName,
+    p.real_name memRealName
+    from tb_mem_personal_creditfile e
+	left join tb_mem_base m on m.id=e.member_id
+	left join tb_mem_personal_userinfo p on p.member_id=e.member_id
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    where e.member_id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectForUpdate" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select* from tb_mem_personal_creditfile e where e.member_id=#{id} for update
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.mem.TsMemPersonalCreditfile" resultMap="BaseResultMap">
+    select e.* from tb_mem_personal_creditfile e where 1=1 order by e.create_date desc limit 1
+  </select>
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.mem.TsMemPersonalCreditfile" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_mem_personal_creditfile e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.mem.TsMemPersonalCreditfile" resultMap="ListBaseResultMap">
+    <include refid="select_for_list_tv" />
+    where 1=1
+    <include refid="query_condition" />
+    <include refid="vitily.com.mapper.comm.CommonMapper.page_info_create_date_instanceof_id" />
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.mem.TsMemPersonalCreditfile" resultType="java.lang.Boolean">
+    select case when
+    exists(select 0 from tb_mem_personal_creditfile e where
+    <include refid="query_exist_condition" />
+    ) then 1
+    else 0
+    end as exists_record from dual
+  </select>
+</mapper>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.pro.ProBrandMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.pro.TbProBrand" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="pic_src" property="picSrc" jdbcType="VARCHAR" />
+    <result column="cate_id" property="cateId" jdbcType="INTEGER" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="vitily.com.tb_entity.pro.TbProBrand" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.pro.TvProBrand" extends="BaseResultMap" >
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+    <result column="cateName" property="cateName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.pro.TvProBrand" extends="ListBaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`sort`, e.`state`, 
+    e.`name`, e.`description`, e.`pic_src`, e.`cate_id`, e.`type_id`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`content`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.name != null and entity.name != ''" >
+        and e.name = #{entity.name}
+      </if>
+      <if test="entity.cateId != null" >
+        and e.cate_id = #{entity.cateId,jdbcType=INTEGER}
+      </if>
+      <if test="entity.typeId != null" >
+        and e.type_id = #{entity.typeId,jdbcType=INTEGER}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+      <if test="typeIdStr != null and typeIdStr != ''">
+      	and e.type_id in(${typeIdStr})
+      </if>
+      <if test="cateIdStr != null and cateIdStr != ''">
+      	and e.cate_id in(${cateIdStr})
+      </if>
+      <if test="selName != null and selName != ''">
+      	and e.name like concat('%',#{selName,jdbcType=VARCHAR},'%')
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <sql id="query_exist_condition">
+  	(1=0
+    <if test="null != entity">
+      <if test="entity.name != null and entity.name != ''" >
+        or e.name = #{entity.name,jdbcType=VARCHAR}
+      </if>
+    </if>
+      )
+    <if test="null !=entity and null != entity.id">
+      and e.id != #{entity.id,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_pro_brand e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_pro_brand
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.pro.TbProBrand" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pro_brand (`create_date`, `update_date`, `deltag`, 
+      `sort`, `state`, `name`, 
+      `description`, `pic_src`, `cate_id`, 
+      `type_id`, `content`)
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{sort,jdbcType=DECIMAL}, #{state,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{picSrc,jdbcType=VARCHAR}, #{cateId,jdbcType=INTEGER}, 
+      #{typeId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.pro.TbProBrand" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pro_brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="description != null" >
+        `description`,
+      </if>
+      <if test="picSrc != null" >
+        `pic_src`,
+      </if>
+      <if test="cateId != null" >
+        `cate_id`,
+      </if>
+      <if test="typeId != null" >
+        `type_id`,
+      </if>
+      <if test="content != null" >
+        `content`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="picSrc != null" >
+        #{picSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="cateId != null" >
+        #{cateId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.pro.TbProBrand" >
+    update tb_pro_brand
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        `description` = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="picSrc != null" >
+        `pic_src` = #{picSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="cateId != null" >
+        `cate_id` = #{cateId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        `type_id` = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        `content` = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.pro.TbProBrand" >
+    update tb_pro_brand
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `state` = #{state,jdbcType=INTEGER},
+      `name` = #{name,jdbcType=VARCHAR},
+      `description` = #{description,jdbcType=VARCHAR},
+      `pic_src` = #{picSrc,jdbcType=VARCHAR},
+      `cate_id` = #{cateId,jdbcType=INTEGER},
+      `type_id` = #{typeId,jdbcType=INTEGER},
+      `content` = #{content,jdbcType=LONGVARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select e.*,
+    c.name as cateName,t.name as typeName
+    from tb_pro_brand e
+	left join tb_comm_category c on e.cate_id=c.id
+	left join tb_comm_type t on e.type_id=t.id
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.pro.TsProBrand" resultMap="BaseResultMap">
+    select e.* from tb_pro_brand e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.pro.TsProBrand" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_pro_brand e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.pro.TsProBrand" resultMap="ListBaseResultMap">
+  	 select 
+	    <include refid="Base_Column_List" />
+	    ,
+	  c.name as cateName from tb_pro_brand e
+	  left join tb_comm_category c on e.cate_id=c.id
+	  left join tb_comm_type t on e.type_id=t.id
+	  where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.pro.TsProBrand" resultType="java.lang.Boolean">
+    select case when
+	exists(select 0 from tb_pro_brand e where 
+	    <include refid="query_exist_condition" />
+	) then 1
+	else 0
+	end as exists_record from dual
+  </select>
+</mapper>

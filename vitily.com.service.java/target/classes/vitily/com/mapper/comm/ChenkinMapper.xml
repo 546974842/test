@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.comm.ChenkinMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.comm.TbChenkin" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="min" property="min" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="job" property="job" jdbcType="VARCHAR" />
+    <result column="tell" property="tell" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`url`, e.`name`, e.`type`, e.`min`, e.`title`, 
+    e.`address`, e.`real_name`, e.`job`, e.`tell`, e.`qq`, e.`create_date`
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_comm_chenkin e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_comm_chenkin
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="vitily.com.tb_entity.comm.TbChenkin" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_comm_chenkin (`url`, `name`, `type`, `title`,
+      `min`, `address`, `real_name`, `job`, `tell`, `qq`, `create_date`)
+    values (#{url,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{min,jdbcType=VARCHAR}, #{address,jdbcType=DECIMAL}, #{realName,jdbcType=VARCHAR}, 
+      #{job,jdbcType=VARCHAR}, #{tell,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR},NOW)
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.comm.TbChenkin" >
+    insert into tb_comm_chenkin
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="url != null" >
+        `url`,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="type != null" >
+        `type`,
+      </if>
+      <if test="title != null" >
+        `title`,
+      </if>
+      <if test="min != null" >
+        `min`,
+      </if>
+      <if test="address != null" >
+        `address`,
+      </if>
+      <if test="realName != null" >
+        `real_name`,
+      </if>
+      <if test="job != null" >
+        `job`,
+      </if>
+      <if test="tell != null" >
+        `tell`,
+      </if>
+      <if test="qq != null" >
+        `qq`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=INTEGER},
+      </if>
+      <if test="min != null" >
+        #{min,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null" >
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="tell != null" >
+        #{tell,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.comm.TsChenkin" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_comm_chenkin e where 1=1
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.comm.TsChenkin" resultMap="BaseResultMap">
+  	select e.* from tb_comm_chenkin e where 1=1
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

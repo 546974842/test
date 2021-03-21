@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.mem.MemSellerMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemSeller" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="vitily.com.tv_entity.mem.TvMemSeller" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="vitily.com.tv_entity.mem.TvMemSeller" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`member_id`, e.`level`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.memberId != null">
+        and e.member_id = #{entity.memberId}
+      </if>
+    </if>
+  </sql>
+  <sql id="exist_condition" >
+    <if test="entity != null" >
+      (1=0
+      )
+      <if test="entity.id != null" >
+        and e.`id` != #{entity.id,jdbcType=INTEGER}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_seller e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="vitily.com.tb_entity.mem.TbMemSeller" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_seller (`member_id`, `level`)
+    values (#{memberId,jdbcType=INTEGER}, #{level,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemSeller" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_seller
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="level != null" >
+        `level`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemSeller" >
+    update tb_mem_seller
+    <set >
+      <if test="memberId != null" >
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        `level` = #{level,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.mem.TbMemSeller" >
+    update tb_mem_seller
+    set `member_id` = #{memberId,jdbcType=INTEGER},
+      `level` = #{level,jdbcType=INTEGER}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectSingleByBean" resultMap="BaseResultMap" parameterType="vitily.com.ts_entity.mem.TsMemSeller">
+    select
+    <include refid="Base_Column_List" />
+    from tb_mem_seller e
+    where 1=1
+    <include refid="query_condition" />
+    limit 1;
+  </select>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_seller e
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="ViewResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" resultMap="BaseResultMap" parameterType="vitily.com.ts_entity.mem.TsMemSeller" >
+    select 
+    <include refid="Base_Column_List" />
+     from tb_mem_seller e where 1=1 
+    <include refid="query_condition" />
+     order by e.`id` desc limit 1
+  </select>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="vitily.com.ts_entity.mem.TsMemSeller" >
+    select count(1) as recordCount from tb_mem_seller e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="vitily.com.ts_entity.mem.TsMemSeller" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="null != pageInfo" >
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''" >
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" resultType="java.lang.Boolean" parameterType="vitily.com.ts_entity.mem.TsMemSeller" >
+    select case when exists(select 0 from tb_mem_seller e where
+    <include refid="exist_condition" />
+    ) then 1 else 0 end as exists_record from dual
+  </select>
+</mapper>

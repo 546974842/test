@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.comm.ImageSamsMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.comm.TbImageSams" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="label_ids" property="labelIds" jdbcType="VARCHAR" />
+    <result column="lmt_src" property="lmtSrc" jdbcType="VARCHAR" />
+    <result column="cnt_src" property="cntSrc" jdbcType="VARCHAR" />
+    <result column="big_src" property="bigSrc" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sys_type" property="sysType" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.comm.TvImageSams" extends="BaseResultMap"/>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.comm.TvImageSams" extends="ListBaseResultMap"/>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, 
+    e.`label_ids`, e.`lmt_src`, e.`cnt_src`, e.`big_src`, e.`name`, 
+    e.`sys_type`, e.`description`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.sysType != null" >
+        and e.sys_type = #{entity.sysType}
+      </if>
+      <if test="entity.name != null and entity.name != '' " >
+        and e.name  = #{entity.name}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+      <if test="selLabelId != null">
+        and concat(',',e.label_ids,',') 
+        like 
+        concat('%,',#{selLabelId,jdbcType=VARCHAR},',%')
+      </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_comm_image_sams e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_comm_image_sams
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.comm.TbImageSams" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_comm_image_sams (`create_date`, `update_date`, `deltag`, 
+      `state`, `sort`, `label_ids`, 
+      `lmt_src`, `cnt_src`, `big_src`, 
+      `name`, `sys_type`, `description`
+      )
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{sort,jdbcType=DECIMAL}, #{labelIds,jdbcType=VARCHAR}, 
+      #{lmtSrc,jdbcType=VARCHAR}, #{cntSrc,jdbcType=VARCHAR}, #{bigSrc,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{sysType,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.comm.TbImageSams" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_comm_image_sams
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="labelIds != null" >
+        `label_ids`,
+      </if>
+      <if test="lmtSrc != null" >
+        `lmt_src`,
+      </if>
+      <if test="cntSrc != null" >
+        `cnt_src`,
+      </if>
+      <if test="bigSrc != null" >
+        `big_src`,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="sysType != null" >
+        `sys_type`,
+      </if>
+      <if test="description != null" >
+        `description`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="labelIds != null" >
+        #{labelIds,jdbcType=VARCHAR},
+      </if>
+      <if test="lmtSrc != null" >
+        #{lmtSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="cntSrc != null" >
+        #{cntSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="bigSrc != null" >
+        #{bigSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null" >
+        #{sysType,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.comm.TbImageSams" >
+    update tb_comm_image_sams
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="labelIds != null" >
+        `label_ids` = #{labelIds,jdbcType=VARCHAR},
+      </if>
+      <if test="lmtSrc != null" >
+        `lmt_src` = #{lmtSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="cntSrc != null" >
+        `cnt_src` = #{cntSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="bigSrc != null" >
+        `big_src` = #{bigSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null" >
+        `sys_type` = #{sysType,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        `description` = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.comm.TbImageSams" >
+    update tb_comm_image_sams
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `label_ids` = #{labelIds,jdbcType=VARCHAR},
+      `lmt_src` = #{lmtSrc,jdbcType=VARCHAR},
+      `cnt_src` = #{cntSrc,jdbcType=VARCHAR},
+      `big_src` = #{bigSrc,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      `sys_type` = #{sysType,jdbcType=INTEGER},
+      `description` = #{description,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="bitInsert" parameterType="java.util.List">
+    
+    insert into tb_comm_image_sams (`create_date`, `update_date`, `deltag`, 
+      `state`, `sort`, `label_ids`, 
+      `lmt_src`, `cnt_src`, `big_src`, 
+      `name`, `sys_type`, `description`
+      ) values
+    <foreach collection="list" item="item" index="index" separator=",">
+        (now(),now()},0,1,0, 
+      #{item.labelIds,jdbcType=VARCHAR}, 
+      #{item.lmtSrc,jdbcType=VARCHAR}, 
+      #{item.cntSrc,jdbcType=VARCHAR}, 
+      #{item.bigSrc,jdbcType=VARCHAR}, 
+      #{item.name,jdbcType=VARCHAR}, 
+      #{item.sysType,jdbcType=INTEGER}, 
+      #{item.description,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_comm_image_sams e
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.comm.TsImageSams" resultMap="BaseResultMap">
+    select e.* from tb_comm_image_sams e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.comm.TsImageSams" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_comm_image_sams e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.comm.TsImageSams" resultMap="ListBaseResultMap">
+  	select e.* from tb_comm_image_sams e where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

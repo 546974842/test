@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--suppress SqlDialectInspection -->
+<mapper namespace="vitily.com.mapper.comm.CateVirtualMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.comm.TbCateVirtual" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="keyword" property="keyword" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="sel_keyword" property="selKeyword" jdbcType="VARCHAR" />
+    <result column="min_price" property="minPrice" jdbcType="DECIMAL" />
+    <result column="max_price" property="maxPrice" jdbcType="DECIMAL" />
+    <result column="cate_ids" property="cateIds" jdbcType="VARCHAR" />
+    <result column="brand_ids" property="brandIds" jdbcType="VARCHAR" />
+    <result column="label_ids" property="labelIds" jdbcType="VARCHAR" />
+    <result column="sql" property="sql" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.comm.TvCateVirtual" extends="BaseResultMap" >
+  	<result column="typeName" property="typeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.comm.TvCateVirtual" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, 
+    e.`type_id`, e.`parent_id`, e.`name`, e.`keyword`,
+    e.`description`, e.`sel_keyword`, e.`min_price`, e.`max_price`, e.`cate_ids`, 
+    e.`brand_ids`, e.`label_ids`, e.`sql`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.typeId != null" >
+        and e.type_id = #{entity.typeId,jdbcType=BIGINT}
+      </if>
+      <if test="entity.parentId != null" >
+        and e.parent_id = #{entity.parentId,jdbcType=BIGINT}
+      </if>
+      <if test="entity.name != null" >
+        and e.name = #{entity.name,jdbcType=VARCHAR}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <!-- 只需要上级名称不一致就行了 -->
+  <sql id="query_exist_condition">
+  	(1=0
+    <if test="null != entity">
+      <if test="entity.parentId != null and entity.name != null" >
+        or (e.parent_id = #{entity.parentId} and e.name = #{entity.name} )
+      </if>
+    </if>
+      )
+    <if test="null !=entity and null != entity.id">
+      and e.id != #{entity.id,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_comm_cate_virtual e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_comm_cate_virtual
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.comm.TbCateVirtual" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_comm_cate_virtual (`create_date`, `update_date`, `deltag`, 
+      `state`, `sort`, `type_id`, 
+      `parent_id`, `name`,
+      `keyword`, `description`, `sel_keyword`, 
+      `min_price`, `max_price`, `cate_ids`, 
+      `brand_ids`, `label_ids`, `sql`
+      )
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{sort,jdbcType=DECIMAL}, #{typeId,jdbcType=INTEGER}, 
+      #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+      #{keyword,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{selKeyword,jdbcType=VARCHAR}, 
+      #{minPrice,jdbcType=DECIMAL}, #{maxPrice,jdbcType=DECIMAL}, #{cateIds,jdbcType=VARCHAR}, 
+      #{brandIds,jdbcType=VARCHAR}, #{labelIds,jdbcType=VARCHAR}, #{sql,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.comm.TbCateVirtual" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_comm_cate_virtual
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="typeId != null" >
+        `type_id`,
+      </if>
+      <if test="parentId != null" >
+        `parent_id`,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="keyword != null" >
+        `keyword`,
+      </if>
+      <if test="description != null" >
+        `description`,
+      </if>
+      <if test="selKeyword != null" >
+        `sel_keyword`,
+      </if>
+      <if test="minPrice != null" >
+        `min_price`,
+      </if>
+      <if test="maxPrice != null" >
+        `max_price`,
+      </if>
+      <if test="cateIds != null" >
+        `cate_ids`,
+      </if>
+      <if test="brandIds != null" >
+        `brand_ids`,
+      </if>
+      <if test="labelIds != null" >
+        `label_ids`,
+      </if>
+      <if test="sql != null" >
+        `sql`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword != null" >
+        #{keyword,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="selKeyword != null" >
+        #{selKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="minPrice != null" >
+        #{minPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="maxPrice != null" >
+        #{maxPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="cateIds != null" >
+        #{cateIds,jdbcType=VARCHAR},
+      </if>
+      <if test="brandIds != null" >
+        #{brandIds,jdbcType=VARCHAR},
+      </if>
+      <if test="labelIds != null" >
+        #{labelIds,jdbcType=VARCHAR},
+      </if>
+      <if test="sql != null" >
+        #{sql,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.comm.TbCateVirtual" >
+    update tb_comm_cate_virtual
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="typeId != null" >
+        `type_id` = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        `parent_id` = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword != null" >
+        `keyword` = #{keyword,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        `description` = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="selKeyword != null" >
+        `sel_keyword` = #{selKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="minPrice != null" >
+        `min_price` = #{minPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="maxPrice != null" >
+        `max_price` = #{maxPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="cateIds != null" >
+        `cate_ids` = #{cateIds,jdbcType=VARCHAR},
+      </if>
+      <if test="brandIds != null" >
+        `brand_ids` = #{brandIds,jdbcType=VARCHAR},
+      </if>
+      <if test="labelIds != null" >
+        `label_ids` = #{labelIds,jdbcType=VARCHAR},
+      </if>
+      <if test="sql != null" >
+        `sql` = #{sql,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.comm.TbCateVirtual" >
+    update tb_comm_cate_virtual
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `type_id` = #{typeId,jdbcType=INTEGER},
+      `parent_id` = #{parentId,jdbcType=INTEGER},
+      `name` = #{name,jdbcType=VARCHAR},
+      `keyword` = #{keyword,jdbcType=VARCHAR},
+      `description` = #{description,jdbcType=VARCHAR},
+      `sel_keyword` = #{selKeyword,jdbcType=VARCHAR},
+      `min_price` = #{minPrice,jdbcType=DECIMAL},
+      `max_price` = #{maxPrice,jdbcType=DECIMAL},
+      `cate_ids` = #{cateIds,jdbcType=VARCHAR},
+      `brand_ids` = #{brandIds,jdbcType=VARCHAR},
+      `label_ids` = #{labelIds,jdbcType=VARCHAR},
+      `sql` = #{sql,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    t.name as typeName
+    from tb_comm_cate_virtual e
+    left join tb_comm_type t on t.id = e.type_id
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.comm.TsCateVirtual" resultMap="BaseResultMap">
+    select e.* from tb_comm_cate_virtual e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.comm.TsCateVirtual" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_comm_cate_virtual e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.comm.TsCateVirtual" resultMap="ListBaseResultMap">
+  	select e.*,
+  	t.name as typeName from tb_comm_cate_virtual e 
+  	left join tb_comm_type t on t.id=e.type_id
+  	where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.comm.TsCateVirtual" resultType="java.lang.Boolean">
+    select case when
+	exists(select 0 from tb_comm_cate_virtual e where 
+	    <include refid="query_exist_condition" />
+	) then 1
+	else 0
+	end as exists_record from dual
+  </select>
+</mapper>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.adm.AdmColumnMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.adm.TbAdmColumn" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="url_link" property="urlLink" jdbcType="VARCHAR" />
+    <result column="is_btn" property="isBtn" jdbcType="INTEGER" />
+    <result column="right_urls" property="rightUrls" jdbcType="VARCHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.adm.TvAdmColumn" extends="BaseResultMap" ></resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.adm.TvAdmColumn" extends="ListBaseResultMap" ></resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, 
+    e.`parent_id`, e.`name`, e.`url_link`, e.`is_btn`, e.`right_urls`, e.`icon`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.parentId != null" >
+        and e.parent_id = #{entity.parentId}
+      </if>
+      <if test="entity.isBtn != null" >
+        and e.is_btn = #{entity.isBtn}
+      </if>
+      <if test="entity.name != null and entity.name != ''" >
+        and e.name = #{entity.name}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+      <if test="selName != null and selName != ''">
+      	and e.name like concat('%',#{selName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="selUriLink != null and selUriLink != ''">
+      	and e.URL_LINK like concat('%',#{selUriLink,jdbcType=VARCHAR},'%')
+      </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <sql id="query_exist_condition">
+  	(1=0
+      <if test="entity.parentId != null and entity.name != null and entity.name != ''" >
+        or (e.parent_id = #{entity.parentId} and e.name=#{entity.name,jdbcType=VARCHAR})
+      </if>
+      )
+    <if test="null !=entity and null != entity.id">
+      and e.id != #{entity.id,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_column e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_adm_column
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.adm.TbAdmColumn" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_adm_column (`create_date`, `update_date`, `deltag`, 
+      `state`, `sort`, `parent_id`, 
+      `name`,  `url_link`, e.`is_btn`, e.`right_urls`, e.`icon`
+      )
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{sort,jdbcType=DECIMAL}, #{parentId,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{urlLink,jdbcType=VARCHAR}
+      , #{isBtn,jdbcType=INTEGER}, #{rightUrls,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.adm.TbAdmColumn" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_adm_column
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="parentId != null" >
+        `parent_id`,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="urlLink != null" >
+        `url_link`,
+      </if>
+      <if test="isBtn != null" >
+        `is_btn`,
+      </if>
+      <if test="rightUrls != null" >
+        `right_urls`,
+      </if>
+      <if test="icon != null" >
+        `icon`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="urlLink != null" >
+        #{urlLink,jdbcType=VARCHAR},
+      </if>
+      <if test="isBtn != null" >
+        #{isBtn,jdbcType=INTEGER},
+      </if>
+      <if test="rightUrls != null" >
+        #{rightUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.adm.TbAdmColumn" >
+    update tb_adm_column
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="parentId != null" >
+        `parent_id` = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="urlLink != null" >
+        `url_link` = #{urlLink,jdbcType=VARCHAR},
+      </if>
+      <if test="isBtn != null" >
+        `is_btn` = #{isBtn,jdbcType=INTEGER},
+      </if>
+      <if test="rightUrls != null" >
+        `right_urls` = #{rightUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null" >
+        `icon` = #{icon,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.adm.TbAdmColumn" >
+    update tb_adm_column
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `parent_id` = #{parentId,jdbcType=INTEGER},
+      `name` = #{name,jdbcType=VARCHAR},
+      `url_link` = #{urlLink,jdbcType=VARCHAR},
+      `is_btn` = #{isBtn,jdbcType=INTEGER},
+      `right_urls` = #{rightUrls,jdbcType=VARCHAR},
+      `icon` = #{icon,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByBean" parameterType="vitily.com.ts_entity.adm.TsAdmColumn" >
+    update tb_adm_column
+    <set >
+      <if test="null != entity">
+      <if test="entity.createDate != null" >
+        `create_date` = #{entity.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entity.updateDate != null" >
+        `update_date` = #{entity.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entity.deltag != null" >
+        `deltag` = #{entity.deltag,jdbcType=INTEGER},
+      </if>
+      <if test="entity.state != null" >
+        `state` = #{entity.state,jdbcType=INTEGER},
+      </if>
+      <if test="entity.sort != null" >
+        `sort` = #{entity.sort,jdbcType=DECIMAL},
+      </if>
+      <if test="entity.parentId != null" >
+        `parent_id` = #{entity.parentId,jdbcType=INTEGER},
+      </if>
+      <if test="entity.name != null" >
+        `name` = #{entity.name,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.urlLink != null" >
+        `url_link` = #{entity.urlLink,jdbcType=VARCHAR},
+      </if>
+        <if test="entity.isBtn != null" >
+          `is_btn` = #{entity.isBtn,jdbcType=INTEGER},
+        </if>
+        <if test="entity.rightUrls != null" >
+          `right_urls` = #{entity.rightUrls,jdbcType=VARCHAR},
+        </if>
+        <if test="entity.icon != null" >
+          `icon` = #{entity.icon,jdbcType=VARCHAR},
+        </if>
+      </if>
+    </set>
+    where
+    1=1
+    <if test="idStr != null and idStr !=''">
+        and id in (${idStr})
+    </if>
+    <if test="null != entity">
+    <if test="entity.id != null and entity.id > 0">
+    	and id = #{entity.id,jdbcType=INTEGER}
+    </if>
+    </if>
+  </update>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_column e
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.adm.TsAdmColumn" resultMap="BaseResultMap">
+  	select e.* from tb_adm_column e
+	 where 1=1
+	 <include refid="query_condition" />
+	 order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.adm.TsAdmColumn" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_adm_column e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.adm.TsAdmColumn" resultMap="ListBaseResultMap">
+  	select e.* from tb_adm_column e where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.adm.TsAdmColumn" resultType="java.lang.Boolean">
+    select case when
+	exists(select 0 from tb_adm_column e where 
+	    <include refid="query_exist_condition" />
+	) then 1
+	else 0
+	end as exists_record from dual
+  </select>
+</mapper>

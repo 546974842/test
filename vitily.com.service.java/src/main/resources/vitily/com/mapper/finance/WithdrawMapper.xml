@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.finance.WithdrawMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.finance.TbWithdraw" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="mode" property="mode" jdbcType="VARCHAR" />
+    <result column="apply_amount" property="applyAmount" jdbcType="DECIMAL" />
+    <result column="expected_fee" property="expectedFee" jdbcType="DECIMAL" />
+    <result column="actual_fee" property="actualFee" jdbcType="DECIMAL" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="platform" property="platform" jdbcType="SMALLINT" />
+    <result column="bankcard_id" property="bankcardId" jdbcType="INTEGER" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="apply_adm_user_id" property="applyAdmUserId" jdbcType="INTEGER" />
+    <result column="audit_adm_user_id" property="auditAdmUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.finance.TvWithdraw" extends="BaseResultMap" >
+    <result column="memName" property="memName" jdbcType="VARCHAR" />
+    <result column="memRealName" property="memRealName" jdbcType="VARCHAR" />
+    <result column="applyAdmUserName" property="applyAdmUserName" jdbcType="VARCHAR" />
+    <result column="auditAdmUserName" property="auditAdmUserName" jdbcType="VARCHAR" />
+    <association property="memBankcard" javaType="vitily.com.tv_entity.mem.TvMemBankcard">
+      <result property="branch" column="b_branch"/>
+      <result property="province" column="b_province"/>
+      <result property="city" column="b_city"/>
+      <result property="area" column="b_area"/>
+      <result property="number" column="b_number"/>
+      <result property="bankName" column="b_bankName"/>
+      <result property="type" column="b_type"/>
+    </association>
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.finance.TvWithdraw" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <include refid="vitily.com.mapper.comm.CommonMapper.ColumnListSimple" />,
+    e.`member_id`, e.`mode`, e.`apply_amount`, e.`expected_fee`, e.`actual_fee`,
+    e.`order_no`, e.`platform`, e.`bankcard_id`, e.`memo`, e.`apply_adm_user_id`,
+    e.`audit_adm_user_id`
+  </sql>
+  <sql id="query_condition">
+    <!-- ts -->
+    <if test="selOrderNo != null and selOrderNo != ''">
+      and e.order_no like concat('%',#{selOrderNo,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="beginAppAmount != null">
+      and e.apply_amount >= #{beginAppAmount,jdbcType=DECIMAL}
+    </if>
+    <if test="endAppAmount != null">
+      <![CDATA[and e.apply_amount <= #{endAppAmount,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="beginExpectedFee != null">
+      and e.expected_fee >= #{beginExpectedFee,jdbcType=DECIMAL}
+    </if>
+    <if test="endExpectedFee != null">
+      <![CDATA[and e.expected_fee <= #{endExpectedFee,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="beginActualFee != null">
+      and e.actual_fee >= #{beginActualFee,jdbcType=DECIMAL}
+    </if>
+    <if test="endActualFee != null">
+      <![CDATA[and e.actual_fee <= #{endActualFee,jdbcType=DECIMAL}]]>
+    </if>
+    <if test="modeStr != null and modeStr != ''">
+      and concat(',',#{modeStr},',') like concat('%,',e.mode,',%')
+    </if>
+    <if test="platformStr != null and platformStr != ''">
+      and e.platform in(${platformStr})
+    </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+    <if test="null != entity">
+      <if test="entity.orderNo != null and entity.orderNo != ''" >
+        and e.order_no = #{entity.orderNo}
+      </if>
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId}
+      </if>
+      <if test="entity.platform != null" >
+        and e.platform = #{entity.platform}
+      </if>
+      <if test="entity.mode != null and entity.mode != ''" >
+        and e.mode = #{entity.mode}
+      </if>
+      <if test="entity.applyAdmUserId != null" >
+        and e.apply_adm_user_id = #{entity.applyAdmUserId}
+      </if>
+      <if test="entity.auditAdmUserId != null" >
+        and e.audit_adm_user_id = #{entity.auditAdmUserId}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+  </sql>
+  <sql id="query_exist_condition">
+    (1=0
+    <if test="null != entity">
+      <if test="entity.orderNo != null and entity.orderNo != ''" >
+        or (
+        e.order_no=#{entity.orderNo,jdbcType=VARCHAR}
+        )
+      </if>
+    </if>
+    )
+    <include refid="vitily.com.mapper.comm.CommonMapper.exist_query_condition" />
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_finance_withdraw e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_finance_withdraw
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.finance.TbWithdraw" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_finance_withdraw (`create_date`, `update_date`, `deltag`, 
+      `state`, `member_id`, `mode`, 
+      `apply_amount`, `expected_fee`, `actual_fee`, 
+      `order_no`, `platform`, `bankcard_id`, 
+      `memo`, `apply_adm_user_id`, `audit_adm_user_id`
+      )
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{mode,jdbcType=VARCHAR}, 
+      #{applyAmount,jdbcType=DECIMAL}, #{expectedFee,jdbcType=DECIMAL}, #{actualFee,jdbcType=DECIMAL}, 
+      #{orderNo,jdbcType=VARCHAR}, #{platform,jdbcType=SMALLINT}, #{bankcardId,jdbcType=INTEGER}, 
+      #{memo,jdbcType=VARCHAR}, #{applyAdmUserId,jdbcType=INTEGER}, #{auditAdmUserId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.finance.TbWithdraw" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_finance_withdraw
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="mode != null" >
+        `mode`,
+      </if>
+      <if test="applyAmount != null" >
+        `apply_amount`,
+      </if>
+      <if test="expectedFee != null" >
+        `expected_fee`,
+      </if>
+      <if test="actualFee != null" >
+        `actual_fee`,
+      </if>
+      <if test="orderNo != null" >
+        `order_no`,
+      </if>
+      <if test="platform != null" >
+        `platform`,
+      </if>
+      <if test="bankcardId != null" >
+        `bankcard_id`,
+      </if>
+      <if test="memo != null" >
+        `memo`,
+      </if>
+      <if test="applyAdmUserId != null" >
+        `apply_adm_user_id`,
+      </if>
+      <if test="auditAdmUserId != null" >
+        `audit_adm_user_id`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="mode != null" >
+        #{mode,jdbcType=VARCHAR},
+      </if>
+      <if test="applyAmount != null" >
+        #{applyAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="expectedFee != null" >
+        #{expectedFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualFee != null" >
+        #{actualFee,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null" >
+        #{platform,jdbcType=SMALLINT},
+      </if>
+      <if test="bankcardId != null" >
+        #{bankcardId,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="applyAdmUserId != null" >
+        #{applyAdmUserId,jdbcType=INTEGER},
+      </if>
+      <if test="auditAdmUserId != null" >
+        #{auditAdmUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.finance.TbWithdraw" >
+    update tb_finance_withdraw
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="mode != null" >
+        `mode` = #{mode,jdbcType=VARCHAR},
+      </if>
+      <if test="applyAmount != null" >
+        `apply_amount` = #{applyAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="expectedFee != null" >
+        `expected_fee` = #{expectedFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualFee != null" >
+        `actual_fee` = #{actualFee,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNo != null" >
+        `order_no` = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null" >
+        `platform` = #{platform,jdbcType=SMALLINT},
+      </if>
+      <if test="bankcardId != null" >
+        `bankcard_id` = #{bankcardId,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        `memo` = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="applyAdmUserId != null" >
+        `apply_adm_user_id` = #{applyAdmUserId,jdbcType=INTEGER},
+      </if>
+      <if test="auditAdmUserId != null" >
+        `audit_adm_user_id` = #{auditAdmUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.finance.TbWithdraw" >
+    update tb_finance_withdraw
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `member_id` = #{memberId,jdbcType=INTEGER},
+      `mode` = #{mode,jdbcType=VARCHAR},
+      `apply_amount` = #{applyAmount,jdbcType=DECIMAL},
+      `expected_fee` = #{expectedFee,jdbcType=DECIMAL},
+      `actual_fee` = #{actualFee,jdbcType=DECIMAL},
+      `order_no` = #{orderNo,jdbcType=VARCHAR},
+      `platform` = #{platform,jdbcType=SMALLINT},
+      `bankcard_id` = #{bankcardId,jdbcType=INTEGER},
+      `memo` = #{memo,jdbcType=VARCHAR},
+      `apply_adm_user_id` = #{applyAdmUserId,jdbcType=INTEGER},
+      `audit_adm_user_id` = #{auditAdmUserId,jdbcType=INTEGER}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByIdAndState" parameterType="vitily.com.ts_entity.finance.TsWithdraw" >
+    update tb_finance_withdraw
+    <set >
+      <if test="entity.updateDate != null" >
+        `update_date` = #{entity.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entity.deltag != null" >
+        `deltag` = #{entity.deltag,jdbcType=INTEGER},
+      </if>
+      <if test="entity.state != null" >
+        `state` = #{entity.state,jdbcType=INTEGER},
+      </if>
+      <if test="entity.actualFee != null" >
+        `actual_fee` = #{entity.actualFee,jdbcType=DECIMAL},
+      </if>
+      <if test="entity.memo != null" >
+        `memo` = #{entity.memo,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.auditAdmUserId != null" >
+        `audit_adm_user_id` = #{entity.auditAdmUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{entity.id,jdbcType=INTEGER} and state in(${stateStr})
+  </update>
+  <select id="selectByOrderNoForUpdate" resultMap="TvResultMap" parameterType="java.lang.String" >
+    select e.* from tb_finance_withdraw e where e.order_no = #{orderNo} for update
+  </select>
+ <!--  原来的提现
+   <sql id="select_for_list_tv">
+    select e.*,
+    b.branch b_branch,
+    b.province b_province,
+    b.city b_city,
+    b.area b_area,
+    b.number b_number,
+    ab.name b_bankName,
+    ab.type b_type,
+
+    m.name memName,
+    case when m.type = 0 then (select real_name from tb_mem_personal_userinfo where member_id=m.id)
+    else (select company_name from tb_mem_company_userinfo where member_id=m.id) end memRealName,
+    au.user_name applyAdmUserName,
+    du.user_name auditAdmUserName
+    from tb_finance_withdraw e
+    left join tb_mem_base m on m.id=e.member_id
+    left join tb_adm_user au on au.id=e.apply_adm_user_id
+    left join tb_adm_user du on du.id=e.audit_adm_user_id,
+	tb_mem_bankcard b
+    left join tb_comm_available_bank ab on ab.id=b.bank_id
+	where e.bankcard_id = b.id and e.member_id=b.member_id
+
+  </sql> -->
+   <sql id="select_for_list_tv">
+    select e.*,
+    b.branch b_branch,
+    b.province b_province,
+    b.city b_city,
+    b.area b_area,
+    IFNULL(b.number,m.zfb_id) b_number,
+  	IFNULL(ab.NAME,'支付宝') as b_bankName,
+    ab.type b_type,
+
+    m.name memName,
+    case when m.type = 0 then (select real_name from tb_mem_personal_userinfo where member_id=m.id)
+    else (select company_name from tb_mem_company_userinfo where member_id=m.id) end memRealName,
+    au.user_name applyAdmUserName,
+    du.user_name auditAdmUserName
+    from tb_finance_withdraw e
+    left join tb_mem_base m on m.id=e.member_id
+    left join tb_adm_user au on au.id=e.apply_adm_user_id
+    left join tb_adm_user du on du.id=e.audit_adm_user_id
+	LEFT JOIN tb_mem_bankcard b ON e.bankcard_id = b.id AND e.member_id = b.member_id
+    left join tb_comm_available_bank ab on ab.id=b.bank_id
+	where 1=1
+
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    and e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.finance.TsWithdraw" resultMap="BaseResultMap">
+    select e.* from tb_finance_withdraw e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.id desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.finance.TsWithdraw" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_finance_withdraw e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.finance.TsWithdraw" resultMap="ListBaseResultMap">
+    <include refid="select_for_list_tv" />
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null">
+        <choose>
+          <when test="pageInfo.sortField !='e.sort'">
+            order by ${pageInfo.fieldOrder}
+          </when>
+          <otherwise>
+            order by e.create_date desc
+          </otherwise>
+        </choose>
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.finance.TsWithdraw" resultType="java.lang.Boolean">
+    select case when
+    exists(select 0 from tb_finance_withdraw e where
+    <include refid="query_exist_condition" />
+    ) then 1
+    else 0
+    end as exists_record from dual
+  </select>
+</mapper>

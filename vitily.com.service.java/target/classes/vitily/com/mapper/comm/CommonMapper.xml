@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.comm.CommonMapper" >
+  <resultMap id="BaseResultSimpleMap" type="vitily.base.tb_entity.BaseEntity">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="BaseResultMap" extends="BaseResultSimpleMap" type="vitily.base.tb_entity.BaseEntity" >
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="ColumnListSimple" >
+    e.`id`, e.`create_date`, e.`deltag`, e.`state`
+  </sql>
+  <sql id="ColumnList" >
+    <include refid="vitily.com.mapper.comm.CommonMapper.ColumnListSimple" />,
+    e.`update_date`, e.`sort`
+  </sql>
+<sql id="entity_query_condition">
+  <if test="entity.id != null" >
+    and e.id = #{entity.id}
+  </if>
+  <if test="entity.state != null" >
+    and e.state = #{entity.state}
+  </if>
+  <if test="entity.deltag != null" >
+    and e.deltag = #{entity.deltag}
+  </if>
+</sql>
+  <sql id="ts_query_condition">
+    <!-- ts -->
+    <if test="idStr != null and idStr != ''">
+      and e.id in(${idStr})
+    </if>
+    <if test="stateStr != null and stateStr != ''">
+      and e.state in(${stateStr})
+    </if>
+    <if test="beginCreateDate != null and beginCreateDate != ''">
+      and e.create_date >= #{beginCreateDate}
+    </if>
+    <if test="endCreateDate != null and endCreateDate != ''">
+      <![CDATA[and e.create_date <= #{endCreateDate}]]>
+    </if>
+    <if test="beginUpdateDate != null and beginUpdateDate != ''">
+      and e.update_date >= #{beginUpdateDate,jdbcType=VARCHAR}
+    </if>
+    <if test="endUpdateDate != null and endUpdateDate != ''">
+      <![CDATA[and e.update_date <= #{endUpdateDate,jdbcType=VARCHAR}]]>
+    </if>
+  </sql>
+  <sql id="exist_query_condition">
+    <if test="null !=entity and null != entity.id">
+      and e.id != #{entity.id,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <sql id="page_info_condition">
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </sql>
+  <sql id="page_info_id_instanceof_sort">
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null">
+        <choose>
+          <when test="pageInfo.sortField !='e.sort'">
+            order by ${pageInfo.fieldOrder}
+          </when>
+          <otherwise>
+            order by e.id desc
+          </otherwise>
+        </choose>
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </sql>
+  <sql id="page_info_create_date_instanceof_sort">
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null">
+        <choose>
+          <when test="pageInfo.sortField !='e.sort'">
+            order by ${pageInfo.fieldOrder}
+          </when>
+          <otherwise>
+            order by e.create_date desc
+          </otherwise>
+        </choose>
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </sql>
+  <sql id="page_info_create_date_instanceof_id">
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null">
+        <choose>
+          <when test="pageInfo.sortField !='e.id'">
+            order by ${pageInfo.fieldOrder}
+          </when>
+          <otherwise>
+            order by e.create_date desc
+          </otherwise>
+        </choose>
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </sql>
+</mapper>

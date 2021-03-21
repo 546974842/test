@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.mem.MemPersonalUserinfoMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemPersonalUserinfo" >
+    <id column="member_id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="birth_date" property="birthDate" jdbcType="DATE" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="id_type" property="idType" jdbcType="INTEGER" />
+    <result column="id_no" property="idNo" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="call" property="call" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.mem.TvMemPersonalUserinfo" extends="BaseResultMap" >
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.mem.TvMemPersonalUserinfo" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`member_id`, e.`update_date`, e.`birth_date`, e.`gender`, e.`real_name`,
+    e.`id_type`, e.`id_no`, e.`phone`, e.`country`, e.`province`,
+    e.`city`, e.`area`, e.`address`, e.`call`, e.`post_code`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId}
+      </if>
+    </if>
+  </sql>
+  <sql id="query_exist_condition">
+    e.member_id=#{entity.memberId}
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_personal_userinfo e
+    where `member_id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="vitily.com.tb_entity.mem.TbMemPersonalUserinfo" >
+    insert into tb_mem_personal_userinfo (`member_id`,`update_date`, `birth_date`, `gender`,
+      `real_name`, `id_type`, `id_no`, 
+      `phone`, `country`, `province`, 
+      `city`, `area`, `address`, 
+      `call`, `post_code`)
+    values (#{memberId,jdbcType=INTEGER}, #{updateDate,jdbcType=TIMESTAMP}, #{birthDate,jdbcType=DATE}, #{gender,jdbcType=INTEGER},
+      #{realName,jdbcType=VARCHAR}, #{idType,jdbcType=INTEGER}, #{idNo,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{call,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemPersonalUserinfo" >
+    insert into tb_mem_personal_userinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="birthDate != null" >
+        `birth_date`,
+      </if>
+      <if test="gender != null" >
+        `gender`,
+      </if>
+      <if test="realName != null" >
+        `real_name`,
+      </if>
+      <if test="idType != null" >
+        `id_type`,
+      </if>
+      <if test="idNo != null" >
+        `id_no`,
+      </if>
+      <if test="phone != null" >
+        `phone`,
+      </if>
+      <if test="country != null" >
+        `country`,
+      </if>
+      <if test="province != null" >
+        `province`,
+      </if>
+      <if test="city != null" >
+        `city`,
+      </if>
+      <if test="area != null" >
+        `area`,
+      </if>
+      <if test="address != null" >
+        `address`,
+      </if>
+      <if test="call != null" >
+        `call`,
+      </if>
+      <if test="postCode != null" >
+        `post_code`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="birthDate != null" >
+        #{birthDate,jdbcType=DATE},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idType != null" >
+        #{idType,jdbcType=INTEGER},
+      </if>
+      <if test="idNo != null" >
+        #{idNo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="call != null" >
+        #{call,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemPersonalUserinfo" >
+    update tb_mem_personal_userinfo
+    <set >
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="birthDate != null" >
+        `birth_date` = #{birthDate,jdbcType=DATE},
+      </if>
+      <if test="gender != null" >
+        `gender` = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="realName != null" >
+        `real_name` = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idType != null" >
+        `id_type` = #{idType,jdbcType=INTEGER},
+      </if>
+      <if test="idNo != null" >
+        `id_no` = #{idNo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        `phone` = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        `country` = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        `province` = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        `city` = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        `area` = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        `address` = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="call != null" >
+        `call` = #{call,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        `post_code` = #{postCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `member_id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.mem.TbMemPersonalUserinfo" >
+    update tb_mem_personal_userinfo
+    set `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `birth_date` = #{birthDate,jdbcType=DATE},
+      `gender` = #{gender,jdbcType=INTEGER},
+      `real_name` = #{realName,jdbcType=VARCHAR},
+      `id_type` = #{idType,jdbcType=INTEGER},
+      `id_no` = #{idNo,jdbcType=VARCHAR},
+      `phone` = #{phone,jdbcType=VARCHAR},
+      `country` = #{country,jdbcType=VARCHAR},
+      `province` = #{province,jdbcType=VARCHAR},
+      `city` = #{city,jdbcType=VARCHAR},
+      `area` = #{area,jdbcType=VARCHAR},
+      `address` = #{address,jdbcType=VARCHAR},
+      `call` = #{call,jdbcType=VARCHAR},
+      `post_code` = #{postCode,jdbcType=VARCHAR}
+    where `member_id` = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select
+    e.*
+    from tb_mem_personal_userinfo e
+    where e.member_id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.mem.TsMemPersonalUserinfo" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_mem_personal_userinfo e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.mem.TsMemPersonalUserinfo" resultMap="ListBaseResultMap">
+    select
+    e.*
+    from tb_mem_personal_userinfo e
+    where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null">
+        <choose>
+          <when test="pageInfo.sortField !='e.sort'">
+            order by ${pageInfo.fieldOrder}
+          </when>
+          <otherwise>
+            order by e.member_id desc
+          </otherwise>
+        </choose>
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.mem.TsMemPersonalUserinfo" resultType="java.lang.Boolean">
+    select case when
+    exists(select 0 from tb_mem_personal_userinfo e where
+    <include refid="query_exist_condition" />
+    ) then 1
+    else 0
+    end as exists_record from dual
+  </select>
+</mapper>

@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.show.ShowTimeMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.show.TbShowTime" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="show_id" property="showId" jdbcType="INTEGER" />
+    <result column="time0_value" property="time0Value" jdbcType="INTEGER" />
+    <result column="time1_value" property="time1Value" jdbcType="INTEGER" />
+    <result column="time2_value" property="time2Value" jdbcType="INTEGER" />
+    <result column="time3_value" property="time3Value" jdbcType="INTEGER" />
+    <result column="time4_value" property="time4Value" jdbcType="INTEGER" />
+    <result column="time5_value" property="time5Value" jdbcType="INTEGER" />
+    <result column="time6_value" property="time6Value" jdbcType="INTEGER" />
+    <result column="time7_value" property="time7Value" jdbcType="INTEGER" />
+    <result column="time8_value" property="time8Value" jdbcType="INTEGER" />
+    <result column="time9_value" property="time9Value" jdbcType="INTEGER" />
+    <result column="time10_value" property="time10Value" jdbcType="INTEGER" />
+    <result column="time11_value" property="time11Value" jdbcType="INTEGER" />
+    <result column="time12_value" property="time12Value" jdbcType="INTEGER" />
+    <result column="time13_value" property="time13Value" jdbcType="INTEGER" />
+    <result column="time14_value" property="time14Value" jdbcType="INTEGER" />
+    <result column="time15_value" property="time15Value" jdbcType="INTEGER" />
+    <result column="time16_value" property="time16Value" jdbcType="INTEGER" />
+    <result column="time17_value" property="time17Value" jdbcType="INTEGER" />
+    <result column="time18_value" property="time18Value" jdbcType="INTEGER" />
+    <result column="time19_value" property="time19Value" jdbcType="INTEGER" />
+    <result column="time20_value" property="time20Value" jdbcType="INTEGER" />
+    <result column="time21_value" property="time21Value" jdbcType="INTEGER" />
+    <result column="time22_value" property="time22Value" jdbcType="INTEGER" />
+    <result column="time23_value" property="time23Value" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.show.TvShowTime" extends="BaseResultMap" >
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.show.TvShowTime" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, e.`show_id`, e.`time0_value`,
+    e.`time1_value`, e.`time2_value`, e.`time3_value`, e.`time4_value`, e.`time5_value`, e.`time6_value`,
+    e.`time7_value`, e.`time8_value`, e.`time9_value`, e.`time10_value`, e.`time11_value`, e.`time12_value`,
+    e.`time13_value`, e.`time14_value`, e.`time15_value`, e.`time16_value`, e.`time17_value`, e.`time18_value`,
+    e.`time19_value`, e.`time20_value`, e.`time21_value`, e.`time22_value`, e.`time23_value`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.showId != null" >
+        and e.show_id = #{entity.showId}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+    <!-- ts -->
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_show_time e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.show.TbShowTime" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_show_time
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="showId != null" >
+        `show_id`,
+      </if>
+      <if test="time0Value != null" >
+        `time0_value`,
+      </if>
+      <if test="time1Value != null" >
+        `time1_value`,
+      </if>
+      <if test="time2Value != null" >
+        `time2_value`,
+      </if>
+      <if test="time3Value != null" >
+        `time3_value`,
+      </if>
+      <if test="time4Value != null" >
+        `time4_value`,
+      </if>
+      <if test="time5Value != null" >
+        `time5_value`,
+      </if>
+      <if test="time6Value != null" >
+        `time6_value`,
+      </if>
+      <if test="time7Value != null" >
+        `time7_value`,
+      </if>
+      <if test="time8Value != null" >
+        `time8_value`,
+      </if>
+      <if test="time9Value != null" >
+        `time9_value`,
+      </if>
+      <if test="time10Value != null" >
+        `time10_value`,
+      </if>
+      <if test="time11Value != null" >
+        `time11_value`,
+      </if>
+      <if test="time12Value != null" >
+        `time12_value`,
+      </if>
+      <if test="time13Value != null" >
+        `time13_value`,
+      </if>
+      <if test="time14Value != null" >
+        `time14_value`,
+      </if>
+      <if test="time15Value != null" >
+        `time15_value`,
+      </if>
+      <if test="time16Value != null" >
+        `time16_value`,
+      </if>
+      <if test="time17Value != null" >
+        `time17_value`,
+      </if>
+      <if test="time18Value != null" >
+        `time18_value`,
+      </if>
+      <if test="time19Value != null" >
+        `time19_value`,
+      </if>
+      <if test="time20Value != null" >
+        `time20_value`,
+      </if>
+      <if test="time21Value != null" >
+        `time21_value`,
+      </if>
+      <if test="time22Value != null" >
+        `time22_value`,
+      </if>
+      <if test="time23Value != null" >
+        `time23_value`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="showId != null" >
+        #{showId,jdbcType=INTEGER},
+      </if>
+      <if test="time0Value != null" >
+        #{time0Value,jdbcType=INTEGER},
+      </if>
+      <if test="time1Value != null" >
+        #{time1Value,jdbcType=INTEGER},
+      </if>
+      <if test="time2Value != null" >
+        #{time2Value,jdbcType=INTEGER},
+      </if>
+      <if test="time3Value != null" >
+        #{time3Value,jdbcType=INTEGER},
+      </if>
+      <if test="time4Value != null" >
+        #{time4Value,jdbcType=INTEGER},
+      </if>
+      <if test="time5Value != null" >
+        #{time5Value,jdbcType=INTEGER},
+      </if>
+      <if test="time6Value != null" >
+        #{time6Value,jdbcType=INTEGER},
+      </if>
+      <if test="time7Value != null" >
+        #{time7Value,jdbcType=INTEGER},
+      </if>
+      <if test="time8Value != null" >
+        #{time8Value,jdbcType=INTEGER},
+      </if>
+      <if test="time9Value != null" >
+        #{time9Value,jdbcType=INTEGER},
+      </if>
+      <if test="time10Value != null" >
+        #{time10Value,jdbcType=INTEGER},
+      </if>
+      <if test="time11Value != null" >
+        #{time11Value,jdbcType=INTEGER},
+      </if>
+      <if test="time12Value != null" >
+        #{time12Value,jdbcType=INTEGER},
+      </if>
+      <if test="time13Value != null" >
+        #{time13Value,jdbcType=INTEGER},
+      </if>
+      <if test="time14Value != null" >
+        #{time14Value,jdbcType=INTEGER},
+      </if>
+      <if test="time15Value != null" >
+        #{time15Value,jdbcType=INTEGER},
+      </if>
+      <if test="time16Value != null" >
+        #{time16Value,jdbcType=INTEGER},
+      </if>
+      <if test="time17Value != null" >
+        #{time17Value,jdbcType=INTEGER},
+      </if>
+      <if test="time18Value != null" >
+        #{time18Value,jdbcType=INTEGER},
+      </if>
+      <if test="time19Value != null" >
+        #{time19Value,jdbcType=INTEGER},
+      </if>
+      <if test="time20Value != null" >
+        #{time20Value,jdbcType=INTEGER},
+      </if>
+      <if test="time21Value != null" >
+        #{time21Value,jdbcType=INTEGER},
+      </if>
+      <if test="time22Value != null" >
+        #{time22Value,jdbcType=INTEGER},
+      </if>
+      <if test="time23Value != null" >
+        #{time23Value,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.show.TbShowTime" >
+    update tb_show_time
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="showId != null" >
+        `show_id` = #{showId,jdbcType=INTEGER},
+      </if>
+      <if test="time0Value != null" >
+        `time0_value` = #{time0Value,jdbcType=INTEGER},
+      </if>
+      <if test="time1Value != null" >
+        `time1_value` = #{time1Value,jdbcType=INTEGER},
+      </if>
+      <if test="time2Value != null" >
+        `time2_value` = #{time2Value,jdbcType=INTEGER},
+      </if>
+      <if test="time3Value != null" >
+        `time3_value` = #{time3Value,jdbcType=INTEGER},
+      </if>
+      <if test="time4Value != null" >
+        `time4_value` = #{time4Value,jdbcType=INTEGER},
+      </if>
+      <if test="time5Value != null" >
+        `time5_value` = #{time5Value,jdbcType=INTEGER},
+      </if>
+      <if test="time6Value != null" >
+        `time6_value` = #{time6Value,jdbcType=INTEGER},
+      </if>
+      <if test="time7Value != null" >
+        `time7_value` = #{time7Value,jdbcType=INTEGER},
+      </if>
+      <if test="time8Value != null" >
+        `time8_value` = #{time8Value,jdbcType=INTEGER},
+      </if>
+      <if test="time9Value != null" >
+        `time9_value` = #{time9Value,jdbcType=INTEGER},
+      </if>
+      <if test="time10Value != null" >
+        `time10_value` = #{time10Value,jdbcType=INTEGER},
+      </if>
+      <if test="time11Value != null" >
+        `time11_value` = #{time11Value,jdbcType=INTEGER},
+      </if>
+      <if test="time12Value != null" >
+        `time12_value` = #{time12Value,jdbcType=INTEGER},
+      </if>
+      <if test="time13Value != null" >
+        `time13_value` = #{time13Value,jdbcType=INTEGER},
+      </if>
+      <if test="time14Value != null" >
+        `time14_value` = #{time14Value,jdbcType=INTEGER},
+      </if>
+      <if test="time15Value != null" >
+        `time15_value` = #{time15Value,jdbcType=INTEGER},
+      </if>
+      <if test="time16Value != null" >
+        `time16_value` = #{time16Value,jdbcType=INTEGER},
+      </if>
+      <if test="time17Value != null" >
+        `time17_value` = #{time17Value,jdbcType=INTEGER},
+      </if>
+      <if test="time18Value != null" >
+        `time18_value` = #{time18Value,jdbcType=INTEGER},
+      </if>
+      <if test="time19Value != null" >
+        `time19_value` = #{time19Value,jdbcType=INTEGER},
+      </if>
+      <if test="time20Value != null" >
+        `time20_value` = #{time20Value,jdbcType=INTEGER},
+      </if>
+      <if test="time21Value != null" >
+        `time21_value` = #{time21Value,jdbcType=INTEGER},
+      </if>
+      <if test="time22Value != null" >
+        `time22_value` = #{time22Value,jdbcType=INTEGER},
+      </if>
+      <if test="time23Value != null" >
+        `time23_value` = #{time23Value,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="select_for_list_tv">
+    select e.*
+    from tb_show_time e
+  </sql>
+  <select id="selectByPrimaryKeyForTv" parameterType="java.lang.Integer" resultMap="TvResultMap">
+    <include refid="select_for_list_tv" />
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.show.TsShowTime" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_show_time e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.show.TsShowTime" resultMap="ListBaseResultMap">
+    <include refid="select_for_list_tv" />
+    where 1=1
+    <include refid="query_condition" />
+    <include refid="vitily.com.mapper.comm.CommonMapper.page_info_id_instanceof_sort" />
+  </select>
+</mapper>

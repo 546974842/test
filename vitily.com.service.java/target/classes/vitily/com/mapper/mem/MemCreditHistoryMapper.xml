@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.mem.MemCreditHistoryMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.mem.TbMemCreditHistory" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="record_type" property="recordType" jdbcType="INTEGER" />
+    <result column="credit_value" property="creditValue" jdbcType="INTEGER" />
+    <result column="balance" property="balance" jdbcType="INTEGER" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="relation_links" property="relationLinks" jdbcType="VARCHAR" />
+    <result column="adm_user_id" property="admUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.mem.TvMemCreditHistory" extends="BaseResultMap" >
+    <result column="admUserName" property="admUserName" jdbcType="VARCHAR" />
+    <result column="memName" property="memName" jdbcType="VARCHAR" />
+    <result column="memRealName" property="memRealName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.mem.TvMemCreditHistory" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`deltag`, e.`state`, e.`member_id`,
+    e.`record_type`, e.`credit_value`, e.`balance`, e.`memo`, e.`relation_links`,
+    e.`adm_user_id`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId}
+      </if>
+      <if test="entity.recordType != null" >
+        and e.record_type = #{entity.recordType}
+      </if>
+      <if test="entity.admUserId != null" >
+        and e.adm_user_id = #{entity.admUserId}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+
+    <if test="beginCreditValue != null">
+      <![CDATA[and e.credit_value >= #{beginCreditValue}]]>
+    </if>
+    <if test="endCreditValue != null">
+      <![CDATA[and e.credit_value <= #{endCreditValue}]]>
+    </if>
+    <if test="recordTypeStr != null and recordTypeStr != '' ">
+      and e.record_type in(${recordTypeStr})
+    </if>
+    <if test="selMemo != null and selMemo != ''">
+      and e.memo like concat('%',#{selMemo,jdbcType=VARCHAR},'%')
+    </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+
+  </sql>
+  <sql id="query_exist_condition">
+    e.member_id=#{entity.memberId} and e.record_type=#{entity.recordType}
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_credit_history e
+    where `id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="vitily.com.tb_entity.mem.TbMemCreditHistory" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_credit_history (
+      `create_date`, `deltag`, `state`, `member_id`, `record_type`,
+      `credit_value`, `balance`, `memo`, `relation_links`, `adm_user_id`
+    )
+    values (
+      #{createDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{recordType,jdbcType=INTEGER},
+      #{creditValue,jdbcType=INTEGER}, #{balance,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR}, #{relationLinks,jdbcType=VARCHAR}, #{admUserId,jdbcType=INTEGER},
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbMemCreditHistory" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_mem_credit_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="recordType != null" >
+        `record_type`,
+      </if>
+      <if test="creditValue != null" >
+        `credit_value`,
+      </if>
+      <if test="balance != null" >
+        `balance`,
+      </if>
+      <if test="memo != null" >
+        `memo`,
+      </if>
+      <if test="relationLinks != null" >
+        `relation_links`,
+      </if>
+      <if test="admUserId != null" >
+        `adm_user_id`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="recordType != null" >
+        #{recordType,jdbcType=INTEGER},
+      </if>
+      <if test="creditValue != null" >
+        #{creditValue,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="relationLinks != null" >
+        #{relationLinks,jdbcType=VARCHAR},
+      </if>
+      <if test="admUserId != null" >
+        #{admUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbMemCreditHistory" >
+    update tb_mem_credit_history
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="recordType != null" >
+        `record_type` = #{recordType,jdbcType=INTEGER},
+      </if>
+      <if test="creditValue != null" >
+        `credit_value` = #{creditValue,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null" >
+        `balance` = #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        `memo` = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="relationLinks != null" >
+        `relation_links` = #{relationLinks,jdbcType=VARCHAR},
+      </if>
+      <if test="admUserId != null" >
+        `adm_user_id` = #{admUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.mem.TbMemCreditHistory" >
+    update tb_mem_credit_history set
+      `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `member_id` = #{memberId,jdbcType=INTEGER},
+      `record_type` = #{recordType,jdbcType=INTEGER},
+      `credit_value` = #{creditValue,jdbcType=INTEGER},
+      `balance` = #{balance,jdbcType=INTEGER},
+      `memo` = #{memo,jdbcType=VARCHAR},
+      `relation_links` = #{relationLinks,jdbcType=VARCHAR},
+      `adm_user_id` = #{admUserId,jdbcType=INTEGER},
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="select_for_list_tv">
+  select e.*,
+    a.user_name admUserName,
+    m.name memName,
+    case when m.type = 0 then (select real_name from tb_mem_personal_userinfo where member_id=m.id)
+    else (select company_name from tb_mem_company_userinfo where member_id=m.id) end memRealName
+   from tb_mem_credit_history e left join tb_adm_user a on a.id=e.adm_user_id
+    left join tb_mem_base m on m.id=e.member_id
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.mem.TsMemCreditHistory" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_mem_credit_history e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.mem.TsMemCreditHistory" resultMap="ListBaseResultMap">
+    <include refid="select_for_list_tv" />
+    where 1=1
+    <include refid="query_condition" />
+    <include refid="vitily.com.mapper.comm.CommonMapper.page_info_id_instanceof_sort" />
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.mem.TsMemCreditHistory" resultType="java.lang.Boolean">
+    select case when
+    exists(select 0 from tb_mem_credit_history e where
+    <include refid="query_exist_condition" />
+    ) then 1
+    else 0
+    end as exists_record from dual
+  </select>
+</mapper>

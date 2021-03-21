@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.mem.MemModelHotMapper" >
+
+  <resultMap id="baseResultMap" type="vitily.com.tb_entity.mem.TbModelHot" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="mode_id" property="modeId" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    e.`id`, e.`member_id`, e.`type`,e.`create_date`
+  </sql>
+  
+  <!-- 查询条件  -->
+   <sql id="query_condition">
+    <if test="memberId != null and memberId != ''" >
+        and e.member_id =#{memberId,jdbcType=INTEGER}
+    </if>
+    <if test="type != null and type != ''" >
+        and e.type =#{type,jdbcType=VARCHAR}
+     </if>
+   </sql>
+  
+  <!-- 总数 -->
+  <select id="getCountPaging" parameterType="vitily.com.tb_entity.mem.TbModelHot" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_mem_model_hot e where 1=1
+    <include refid="query_condition" />
+  </select>
+  
+  <!-- 分页list -->
+  <select id="getListByBean" parameterType="vitily.com.tb_entity.mem.TbModelHot" resultMap="baseResultMap">
+  	select
+    <include refid="Base_Column_List" />
+  	from tb_mem_model_hot e
+  	where 1=1
+  	 <include refid="query_condition" />
+	<if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if> 
+  </select>
+  
+   <!-- 根据主键查询 -->
+   <select id="selectByPrimaryKey" resultMap="baseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_model_hot e
+    where e.`member_id` = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 根据主键查询2 -->
+   <select id="selectCount" resultType="java.lang.Integer" parameterType="vitily.com.tb_entity.mem.TbModelHot" >
+    select count(*)
+    from tb_mem_model_hot e
+    where e.`member_id` = #{memberId,jdbcType=INTEGER}
+    and e.`type` = #{type,jdbcType=VARCHAR}
+    and e.`mode_id` = #{modeId,jdbcType=INTEGER}
+  </select>
+  <!-- 插入 -->
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.mem.TbModelHot" >
+    insert into tb_mem_model_hot (`member_id`,`mode_id`,`type` ,`create_date`)
+    values (#{memberId,jdbcType=INTEGER},#{modeId,jdbcType=INTEGER},#{type,jdbcType=VARCHAR}, NOW())
+  </insert>
+  
+  <!-- 更新 -->
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.mem.TbModelHot" >
+  </update>
+</mapper>

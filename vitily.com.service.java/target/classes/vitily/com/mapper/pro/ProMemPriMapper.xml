@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vitily.com.mapper.pro.ProMemPriMapper">
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.pro.TbProMemPri">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="deltag" jdbcType="INTEGER" property="deltag" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="spec_par_pro_id" jdbcType="INTEGER" property="specParProId" />
+    <result column="guid" jdbcType="VARCHAR" property="guid" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="spec_par_ids" jdbcType="VARCHAR" property="specParIds" />
+    <result column="sort" jdbcType="DECIMAL" property="sort" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.pro.TvProMemPri" extends="BaseResultMap" >
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.pro.TvProMemPri" extends="ListBaseResultMap" >
+  </resultMap>
+  <sql id="Base_Column_List">
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`sort`, e.`state`, 
+    e.`member_id`, e.`group_id`, e.`product_id`, e.`spec_par_pro_id`, e.`guid`, 
+    e.`price`, e.`spec_par_ids`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId,jdbcType=BIGINT}
+      </if>
+      <if test="entity.groupId != null" >
+        and e.group_id = #{entity.groupId,jdbcType=BIGINT}
+      </if>
+      <if test="entity.productId != null" >
+        and e.product_id = #{entity.productId,jdbcType=BIGINT}
+      </if>
+      <if test="entity.specParProId != null" >
+        and e.spec_par_pro_id = #{entity.specParProId,jdbcType=BIGINT}
+      </if>
+      <if test="entity.guid != null" >
+        and e.guid = #{entity.guid,jdbcType=VARCHAR}
+      </if>
+      <if test="entity.specParIds != null" >
+        and e.spec_par_ids = #{entity.specParIds,jdbcType=VARCHAR}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+      <if test="specParProIds != null and specParProIds !=null" >
+        and e.spec_par_pro_id in(${specParProIds})
+      </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  
+  <sql id="del_condition">
+    <if test="null != entity">
+      <if test="entity.memberId != null" >
+        and e.member_id = #{entity.memberId,jdbcType=INTEGER}
+      </if>
+      <if test="entity.groupId != null" >
+        and e.group_id = #{entity.groupId,jdbcType=INTEGER}
+      </if>
+      <if test="entity.productId != null" >
+        and e.product_id = #{entity.productId,jdbcType=INTEGER}
+      </if>
+      <if test="entity.specParProId != null" >
+        and e.spec_par_pro_id = #{entity.specParProId,jdbcType=INTEGER}
+      </if>
+      <if test="entity.guid != null" >
+        and e.guid = #{entity.guid,jdbcType=VARCHAR}
+      </if>
+      <if test="entity.specParIds != null" >
+        and e.spec_par_ids = #{entity.specParIds,jdbcType=VARCHAR}
+      </if>
+    </if>
+      <if test="specParProIds != null and specParProIds !=null" >
+        and e.spec_par_pro_id in(${specParProIds})
+      </if>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pro_mem_pri e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_pro_mem_pri
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.pro.TbProMemPri">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pro_mem_pri (`create_date`, `update_date`, `deltag`, 
+      `member_id`, `group_id`, `product_id`, 
+      `spec_par_pro_id`, `guid`, `price`, 
+      `spec_par_ids`, `sort`, `state`
+      )
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{memberId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+      #{specParProId,jdbcType=INTEGER}, #{guid,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{specParIds,jdbcType=VARCHAR}, #{sort,jdbcType=DECIMAL}, #{state,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.pro.TbProMemPri">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pro_mem_pri
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        `create_date`,
+      </if>
+      <if test="updateDate != null">
+        `update_date`,
+      </if>
+      <if test="deltag != null">
+        `deltag`,
+      </if>
+      <if test="memberId != null">
+        `member_id`,
+      </if>
+      <if test="groupId != null">
+        `group_id`,
+      </if>
+      <if test="productId != null">
+        `product_id`,
+      </if>
+      <if test="specParProId != null">
+        `spec_par_pro_id`,
+      </if>
+      <if test="guid != null">
+        `guid`,
+      </if>
+      <if test="price != null">
+        `price`,
+      </if>
+      <if test="specParIds != null">
+        `spec_par_ids`,
+      </if>
+      <if test="sort != null">
+        `sort`,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="specParProId != null">
+        #{specParProId,jdbcType=INTEGER},
+      </if>
+      <if test="guid != null">
+        #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="specParIds != null">
+        #{specParIds,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.pro.TbProMemPri">
+    update tb_pro_mem_pri
+    <set>
+      <if test="createDate != null">
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null">
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null">
+        `group_id` = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        `product_id` = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="specParProId != null">
+        `spec_par_pro_id` = #{specParProId,jdbcType=INTEGER},
+      </if>
+      <if test="guid != null">
+        `guid` = #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        `price` = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="specParIds != null">
+        `spec_par_ids` = #{specParIds,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.pro.TbProMemPri">
+    update tb_pro_mem_pri
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `member_id` = #{memberId,jdbcType=INTEGER},
+      `group_id` = #{groupId,jdbcType=INTEGER},
+      `product_id` = #{productId,jdbcType=INTEGER},
+      `spec_par_pro_id` = #{specParProId,jdbcType=INTEGER},
+      `guid` = #{guid,jdbcType=VARCHAR},
+      `price` = #{price,jdbcType=DECIMAL},
+      `spec_par_ids` = #{specParIds,jdbcType=VARCHAR},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `state` = #{state,jdbcType=INTEGER}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByBean" parameterType="vitily.com.ts_entity.pro.TsProMemPri" >
+    update tb_pro_mem_pri e
+    <set >
+      <if test="null != entity">
+      <if test="entity.updateDate != null" >
+        update_date = #{entity.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="entity.deltag != null" >
+        deltag = #{entity.deltag,jdbcType=INTEGER},
+      </if>
+      <if test="entity.sort != null" >
+        sort = #{entity.sort,jdbcType=DECIMAL},
+      </if>
+      <if test="entity.state != null" >
+        state = #{entity.state,jdbcType=INTEGER},
+      </if>
+      <if test="entity.memberId != null" >
+        member_id = #{entity.memberId,jdbcType=BIGINT},
+      </if>
+      <if test="entity.groupId != null" >
+        group_id = #{entity.groupId,jdbcType=BIGINT},
+      </if>
+      <if test="entity.guid != null" >
+        guid = #{entity.guid,jdbcType=VARCHAR},
+      </if>
+      <if test="entity.price != null" >
+        price = #{entity.price,jdbcType=DECIMAL},
+      </if>
+      <if test="entity.specParIds != null" >
+        spec_par_ids = #{entity.specParIds,jdbcType=VARCHAR},
+      </if>
+      </if>
+    </set>
+    where 1=1
+    <include refid="del_condition" />;
+  </update>
+  <select id="getListForMemPriByBean" parameterType="vitily.com.ts_entity.pro.TsProMemPri" resultMap="ListBaseResultMap">
+	  select
+        mg.name as memGroupName,mg.percent as percent,
+        mg.id as group_id,e.*
+	  from `tb_mem_group` mg
+	  left join tb_pro_mem_pri e on e.group_id=mg.id
+	  <include refid="query_condition" />
+	  where mg.deltag=0 
+	  order by mg.sort desc;
+  </select>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pro_mem_pri e
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.pro.TsProMemPri" resultMap="BaseResultMap">
+    select e.* from tb_pro_mem_pri e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.pro.TsProMemPri" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_pro_mem_pri e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.pro.TsProMemPri" resultMap="ListBaseResultMap">
+  	select e.* from tb_pro_mem_pri e where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vitily.com.mapper.pro.ProDynproValMapper">
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.pro.TbProDynproVal">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="deltag" jdbcType="INTEGER" property="deltag" />
+    <result column="sort" jdbcType="DECIMAL" property="sort" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="proper_id" jdbcType="INTEGER" property="properId" />
+    <result column="proper_name" jdbcType="VARCHAR" property="properName" />
+    <result column="guid" jdbcType="VARCHAR" property="guid" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="vitily.com.tb_entity.pro.TbProDynproVal">
+    <result column="value" jdbcType="LONGVARCHAR" property="value" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.pro.TvProDynproVal" extends="BaseResultMap" >
+  	<result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="html_type" property="htmlType" jdbcType="DECIMAL" />
+    <result column="pro_value" property="proValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.pro.TvProDynproVal" extends="ResultMapWithBLOBs" >
+  	<result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="html_type" property="htmlType" jdbcType="DECIMAL" />
+    <result column="pro_value" property="proValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`sort`, e.`state`,
+    e.`product_id`, e.`proper_id`, e.`proper_name`, e.`guid`
+  </sql>
+  <sql id="Blob_Column_List">
+    e.`value`
+  </sql>
+  
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.productId != null" >
+        and e.product_id = #{entity.productId}
+      </if>
+      <if test="entity.properId != null" >
+        and e.proper_id = #{entity.properId}
+      </if>
+      <if test="entity.guid != null" >
+        and e.guid = #{entity.guid}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_pro_dynpro_val e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_pro_dynpro_val
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.pro.TbProDynproVal">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pro_dynpro_val (`create_date`, `update_date`, `deltag`, 
+      `sort`, `product_id`, `proper_id`, 
+      `proper_name`, `guid`, `state`, 
+      `value`)
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{sort,jdbcType=DECIMAL}, #{productId,jdbcType=INTEGER}, #{properId,jdbcType=INTEGER}, 
+      #{properName,jdbcType=VARCHAR}, #{guid,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{value,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.pro.TbProDynproVal">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pro_dynpro_val
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        `create_date`,
+      </if>
+      <if test="updateDate != null">
+        `update_date`,
+      </if>
+      <if test="deltag != null">
+        `deltag`,
+      </if>
+      <if test="sort != null">
+        `sort`,
+      </if>
+      <if test="productId != null">
+        `product_id`,
+      </if>
+      <if test="properId != null">
+        `proper_id`,
+      </if>
+      <if test="properName != null">
+        `proper_name`,
+      </if>
+      <if test="guid != null">
+        `guid`,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+      <if test="value != null">
+        `value`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="properId != null">
+        #{properId,jdbcType=INTEGER},
+      </if>
+      <if test="properName != null">
+        #{properName,jdbcType=VARCHAR},
+      </if>
+      <if test="guid != null">
+        #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.pro.TbProDynproVal">
+    update tb_pro_dynpro_val
+    <set>
+      <if test="createDate != null">
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null">
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="productId != null">
+        `product_id` = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="properId != null">
+        `proper_id` = #{properId,jdbcType=INTEGER},
+      </if>
+      <if test="properName != null">
+        `proper_name` = #{properName,jdbcType=VARCHAR},
+      </if>
+      <if test="guid != null">
+        `guid` = #{guid,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="value != null">
+        `value` = #{value,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.pro.TbProDynproVal">
+    update tb_pro_dynpro_val
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `product_id` = #{productId,jdbcType=INTEGER},
+      `proper_id` = #{properId,jdbcType=INTEGER},
+      `proper_name` = #{properName,jdbcType=VARCHAR},
+      `guid` = #{guid,jdbcType=VARCHAR},
+      `state` = #{state,jdbcType=INTEGER},
+      `value` = #{value,jdbcType=LONGVARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="deleteByBean" parameterType="vitily.com.ts_entity.pro.TsProDynproVal" >
+    update tb_pro_dynpro_val e set `deltag`=1
+    where 1=1
+    <include refid="query_condition" />
+  </update>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.pro.TsProDynproVal" resultMap="TvResultMap">
+     select e.*,
+     p.name as pro_name,
+     p.html_type as html_type,
+     p.value as pro_value
+     from tb_pro_dynpro_val e
+     left join tb_comm_dyn_proper p on p.id=e.proper_id
+     where 1=1
+  	 <include refid="query_condition" />
+  	 order by e.sort asc
+  </select>
+</mapper>

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.adm.AdmLogMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.adm.TbAdmLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="column_id" property="columnId" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="opera_desc" property="operaDesc" jdbcType="VARCHAR" />
+    <result column="uri" property="uri" jdbcType="VARCHAR" />
+    <result column="arguments" property="arguments" jdbcType="VARCHAR" />
+    <result column="return_value" property="returnValue" jdbcType="VARCHAR" />
+    <result column="other_args" property="otherArgs" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.adm.TvAdmLog" extends="BaseResultMap" >
+  	<result column="columnName" property="columnName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.adm.TvAdmLog" extends="ListBaseResultMap"/>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, 
+    e.`column_id`, e.`time`, e.`user_name`, e.`user_id`, e.`opera_desc`, 
+    e.`uri`, e.`arguments`, e.`return_value`, e.`other_args`, e.`ip`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.columnId != null" >
+        and e.column_id = #{entity.columnId}
+      </if>
+      <if test="entity.ip != null and entity.ip != ''" >
+        and e.ip = #{entity.ip}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+
+      <if test="columnIdStr != null and columnIdStr != ''">
+        and e.column_id in(${columnIdStr})
+      </if>
+      <if test="beginLogTime != null and beginLogTime != ''">
+        and e.time >= #{beginLogTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endLogTime != null and endLogTime != ''">
+        <![CDATA[and e.time <= #{endLogTime,jdbcType=VARCHAR}]]>
+      </if>
+      <if test="selUserName != null and selUserName != ''">
+        and e.user_name like concat('%',#{selUserName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="selUserIds != null and selUserIds != ''">
+        and e.user_id in(${selUserIds})
+      </if>
+      <if test="selUri != null and selUri != ''">
+        and e.uri like concat('%',#{selUri,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="selOperaDesc != null and selOperaDesc != ''">
+        and e.opera_desc like concat('%',#{selOperaDesc,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="selIp != null and selIp != ''">
+        and e.ip like concat('%',#{selIp,jdbcType=VARCHAR},'%')
+      </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_log e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_adm_log
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="vitily.com.tb_entity.adm.TbAdmLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_adm_log (`create_date`, `update_date`, `deltag`, 
+      `state`, `sort`, `column_id`, 
+      `time`, `user_name`, `user_id`, 
+      `opera_desc`, `uri`, `arguments`, 
+      `return_value`, `other_args`, `ip`
+      )
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{sort,jdbcType=DECIMAL}, #{columnId,jdbcType=INTEGER}, 
+      #{time,jdbcType=TIMESTAMP}, #{userName,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{operaDesc,jdbcType=VARCHAR}, #{uri,jdbcType=VARCHAR}, #{arguments,jdbcType=VARCHAR}, 
+      #{returnValue,jdbcType=VARCHAR}, #{otherArgs,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.adm.TbAdmLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_adm_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="columnId != null" >
+        `column_id`,
+      </if>
+      <if test="time != null" >
+        `time`,
+      </if>
+      <if test="userName != null" >
+        `user_name`,
+      </if>
+      <if test="userId != null" >
+        `user_id`,
+      </if>
+      <if test="operaDesc != null" >
+        `opera_desc`,
+      </if>
+      <if test="uri != null" >
+        `uri`,
+      </if>
+      <if test="arguments != null" >
+        `arguments`,
+      </if>
+      <if test="returnValue != null" >
+        `return_value`,
+      </if>
+      <if test="otherArgs != null" >
+        `other_args`,
+      </if>
+      <if test="ip != null" >
+        `ip`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="columnId != null" >
+        #{columnId,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="operaDesc != null" >
+        #{operaDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="uri != null" >
+        #{uri,jdbcType=VARCHAR},
+      </if>
+      <if test="arguments != null" >
+        #{arguments,jdbcType=VARCHAR},
+      </if>
+      <if test="returnValue != null" >
+        #{returnValue,jdbcType=VARCHAR},
+      </if>
+      <if test="otherArgs != null" >
+        #{otherArgs,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.adm.TbAdmLog" >
+    update tb_adm_log
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="columnId != null" >
+        `column_id` = #{columnId,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        `time` = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userName != null" >
+        `user_name` = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        `user_id` = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="operaDesc != null" >
+        `opera_desc` = #{operaDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="uri != null" >
+        `uri` = #{uri,jdbcType=VARCHAR},
+      </if>
+      <if test="arguments != null" >
+        `arguments` = #{arguments,jdbcType=VARCHAR},
+      </if>
+      <if test="returnValue != null" >
+        `return_value` = #{returnValue,jdbcType=VARCHAR},
+      </if>
+      <if test="otherArgs != null" >
+        `other_args` = #{otherArgs,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        `ip` = #{ip,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.adm.TbAdmLog" >
+    update tb_adm_log
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `column_id` = #{columnId,jdbcType=INTEGER},
+      `time` = #{time,jdbcType=TIMESTAMP},
+      `user_name` = #{userName,jdbcType=VARCHAR},
+      `user_id` = #{userId,jdbcType=INTEGER},
+      `opera_desc` = #{operaDesc,jdbcType=VARCHAR},
+      `uri` = #{uri,jdbcType=VARCHAR},
+      `arguments` = #{arguments,jdbcType=VARCHAR},
+      `return_value` = #{returnValue,jdbcType=VARCHAR},
+      `other_args` = #{otherArgs,jdbcType=VARCHAR},
+      `ip` = #{ip,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <insert id="bitInsert" parameterType="java.util.List" >
+    insert into tb_adm_log (`create_date`, `update_date`, `deltag`, 
+      `state`, `sort`, `column_id`, 
+      `time`, `user_name`, `user_id`, 
+      `opera_desc`, `uri`, `arguments`, 
+      `return_value`, `other_args`, `ip`
+      )
+    values 
+    <foreach collection="list" item="item" index="index" separator=",">
+        (now(),now(),0,#{item.state},0,#{item.apiUriId},#{item.name},
+        #{item.uri},#{item.ip},#{item.time},#{item.arguments},#{item.otherArgs},
+        #{item.returnValue},#{item.memberNumber},#{item.ip})
+    </foreach>
+  </insert>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select 
+	<include refid="Base_Column_List" />
+    ,
+    c.name as columnName
+    from tb_adm_log e
+    left join tb_adm_column c on c.id = e.column_id
+  	where 1=1
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.adm.TsAdmLog" resultMap="BaseResultMap">
+    select e.* from tb_adm_log e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.adm.TsAdmLog" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_adm_log e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.adm.TsAdmLog" resultMap="ListBaseResultMap">
+  	select e.*
+    ,
+    c.name as columnName
+  	from tb_adm_log e
+    left join tb_adm_column c on c.id = e.column_id
+  	where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

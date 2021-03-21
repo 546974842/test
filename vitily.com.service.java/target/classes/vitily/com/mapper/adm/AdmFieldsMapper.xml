@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.adm.AdmFieldsMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.adm.TbAdmFields" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="admin_id" property="adminId" jdbcType="INTEGER" />
+    <result column="table_name" property="tableName" jdbcType="VARCHAR" />
+    <result column="column_id" property="columnId" jdbcType="INTEGER" />
+    <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
+    <result column="field_show_name" property="fieldShowName" jdbcType="VARCHAR" />
+    <result column="row_width" property="rowWidth" jdbcType="INTEGER" />
+    <result column="sortable" property="sortable" jdbcType="INTEGER" />
+    <result column="field_proper_name" property="fieldProperName" jdbcType="VARCHAR" />
+    <result column="visible_template" property="visibleTemplate" jdbcType="VARCHAR" />
+    <result column="row_group" property="rowGroup" jdbcType="INTEGER" />
+    <result column="col_group" property="colGroup" jdbcType="INTEGER" />
+    <result column="fixed" property="fixed" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.adm.TvAdmFields" extends="BaseResultMap"/>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.adm.TvAdmFields" extends="ListBaseResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, 
+    e.`admin_id`, e.`table_name`,e.`column_id`, e.`field_name`, e.`field_show_name`, 
+    e.`row_width`, e.`sortable`, e.`field_proper_name`,e.visible_template,e.row_group,e.col_group,e.fixed
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.adminId != null" >
+        and e.admin_id = #{entity.adminId}
+      </if>
+      <if test="entity.columnId != null" >
+        and e.column_id = #{entity.columnId}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+      <!-- ts -->
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <!-- 每个admin每个表字段都是唯一 -->
+  <sql id="query_exist_condition">
+  	(1=0
+    <if test="null != entity">
+      <if test="entity.adminId != null and 
+      entity.tableName != null and entity.tableName != '' and
+      entity.fieldName != null and entity.fieldName != ''" >
+        or (
+        e.admin_id = #{entity.adminId}
+        and
+        e.table_name = #{entity.tableName}
+        and
+        e.field_name = #{entity.fieldName}
+        )
+      </if>
+    </if>
+      )
+    <if test="null !=entity and null != entity.id">
+      and e.id != #{entity.id,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_fields e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_adm_fields 
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="vitily.com.tb_entity.adm.TbAdmFields" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_adm_fields (`create_date`, `update_date`, `deltag`, 
+      `state`, `sort`, `admin_id`, 
+      `table_name`, `column_id`, `field_name`, 
+      `field_show_name`, `row_width`, `sortable`, 
+      `field_proper_name`,`visible_template`,`row_group`,`col_group`,`fixed`)
+    values (#{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{deltag,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{sort,jdbcType=DECIMAL}, #{adminId,jdbcType=INTEGER},
+      #{tableName,jdbcType=VARCHAR}, #{columnId,jdbcType=INTEGER}, #{fieldName,jdbcType=VARCHAR}, 
+      #{fieldShowName,jdbcType=VARCHAR}, #{rowWidth,jdbcType=INTEGER}, #{sortable,jdbcType=INTEGER}, 
+      #{fieldProperName,jdbcType=VARCHAR},#{visibleTemplate,jdbcType=VARCHAR},#{rowGroup,jdbcType=INTEGER},#{colGroup,jdbcType=INTEGER}
+      ,#{fixed,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.adm.TbAdmFields" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_adm_fields
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="updateDate != null" >
+        `update_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="sort != null" >
+        `sort`,
+      </if>
+      <if test="adminId != null" >
+        `admin_id`,
+      </if>
+      <if test="tableName != null" >
+        `table_name`,
+      </if>
+      <if test="columnId != null" >
+        `column_id`,
+      </if>
+      <if test="fieldName != null" >
+        `field_name`,
+      </if>
+      <if test="fieldShowName != null" >
+        `field_show_name`,
+      </if>
+      <if test="rowWidth != null" >
+        `row_width`,
+      </if>
+      <if test="sortable != null" >
+        `sortable`,
+      </if>
+      <if test="fieldProperName != null" >
+        `field_proper_name`,
+      </if>
+      <if test="visibleTemplate != null" >
+        `visible_template`,
+      </if>
+      <if test="rowGroup != null" >
+        `row_group`,
+      </if>
+      <if test="colGroup != null" >
+        `col_group`,
+      </if>
+      <if test="fixed != null" >
+        `fixed`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="tableName != null" >
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="columnId != null" >
+        #{columnId,jdbcType=INTEGER},
+      </if>
+      <if test="fieldName != null" >
+        #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldShowName != null" >
+        #{fieldShowName,jdbcType=VARCHAR},
+      </if>
+      <if test="rowWidth != null" >
+        #{rowWidth,jdbcType=INTEGER},
+      </if>
+      <if test="sortable != null" >
+        #{sortable,jdbcType=INTEGER},
+      </if>
+      <if test="fieldProperName != null" >
+        #{fieldProperName,jdbcType=VARCHAR},
+      </if>
+      <if test="visibleTemplate != null" >
+        #{visible_template,jdbcType=VARCHAR},
+      </if>
+      <if test="rowGroup != null" >
+        #{rowGroup,jdbcType=INTEGER},
+      </if>
+      <if test="colGroup != null" >
+        #{colGroup,jdbcType=INTEGER},
+      </if>
+      <if test="fixed != null" >
+        #{fixed,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.adm.TbAdmFields" >
+    update tb_adm_fields
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        `sort` = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="adminId != null" >
+        `admin_id` = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="tableName != null" >
+        `table_name` = #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="columnId != null" >
+        `column_id` = #{columnId,jdbcType=INTEGER},
+      </if>
+      <if test="fieldName != null" >
+        `field_name` = #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldShowName != null" >
+        `field_show_name` = #{fieldShowName,jdbcType=VARCHAR},
+      </if>
+      <if test="rowWidth != null" >
+        `row_width` = #{rowWidth,jdbcType=INTEGER},
+      </if>
+      <if test="sortable != null" >
+        `sortable` = #{sortable,jdbcType=INTEGER},
+      </if>
+      <if test="fieldProperName != null" >
+        `field_proper_name` = #{fieldProperName,jdbcType=VARCHAR},
+      </if>
+      <if test="visibleTemplate != null" >
+        `visible_template` = #{visibleTemplate,jdbcType=VARCHAR},
+      </if>
+      <if test="rowGroup != null" >
+        `row_group` = #{rowGroup,jdbcType=INTEGER},
+      </if>
+      <if test="colGroup != null" >
+        `col_group` = #{colGroup,jdbcType=INTEGER},
+      </if>
+      <if test="fixed != null" >
+        `fixed` = #{fixed,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="vitily.com.tb_entity.adm.TbAdmFields" >
+    update tb_adm_fields
+    set `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      `update_date` = #{updateDate,jdbcType=TIMESTAMP},
+      `deltag` = #{deltag,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      `sort` = #{sort,jdbcType=DECIMAL},
+      `admin_id` = #{adminId,jdbcType=INTEGER},
+      `table_name` = #{tableName,jdbcType=VARCHAR},
+      `column_id` = #{columnId,jdbcType=INTEGER},
+      `field_name` = #{fieldName,jdbcType=VARCHAR},
+      `field_show_name` = #{fieldShowName,jdbcType=VARCHAR},
+      `row_width` = #{rowWidth,jdbcType=INTEGER},
+      `sortable` = #{sortable,jdbcType=INTEGER},
+      `field_proper_name` = #{fieldProperName,jdbcType=VARCHAR},
+      `visible_template` = #{visibleTemplate,jdbcType=VARCHAR},
+      `row_group` = #{rowGroup,jdbcType=INTEGER},
+      `col_group` = #{colGroup,jdbcType=INTEGER},
+      `fixed` = #{fixed,jdbcType=VARCHAR}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_fields e
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getMaxBean" parameterType="vitily.com.ts_entity.adm.TsAdmFields" resultMap="BaseResultMap">
+    select e.* from tb_adm_fields e
+    where 1=1
+    <include refid="query_condition" />
+    order by e.sort desc limit 1
+  </select>
+
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.adm.TsAdmFields" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_adm_fields e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.adm.TsAdmFields" resultMap="ListBaseResultMap">
+  	select e.* from tb_adm_fields e where 1=1
+    <include refid="query_condition" />
+    <if test="null != pageInfo">
+      <if test="pageInfo.fieldOrder !=null and pageInfo.fieldOrder != ''">
+        order by ${pageInfo.fieldOrder}
+      </if>
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="isExists" parameterType="vitily.com.ts_entity.adm.TsAdmFields" resultType="java.lang.Boolean">
+    select case when
+	exists(select 0 from tb_adm_fields e where 
+	    <include refid="query_exist_condition" />
+	) then 1
+	else 0
+	end as exists_record from dual
+  </select>
+</mapper>

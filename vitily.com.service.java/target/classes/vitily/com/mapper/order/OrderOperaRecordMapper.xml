@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="vitily.com.mapper.order.OrderOperaRecordMapper" >
+  <resultMap id="BaseResultMap" type="vitily.com.tb_entity.order.TbOrderOperaRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="relation_id" property="relationId" jdbcType="INTEGER" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="adm_user_id" property="admUserId" jdbcType="INTEGER" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="field01" property="field01" jdbcType="VARCHAR" />
+    <result column="value01" property="value01" jdbcType="VARCHAR" />
+    <result column="field02" property="field02" jdbcType="VARCHAR" />
+    <result column="value02" property="value02" jdbcType="VARCHAR" />
+    <result column="field03" property="field03" jdbcType="VARCHAR" />
+    <result column="value03" property="value03" jdbcType="VARCHAR" />
+    <result column="field04" property="field04" jdbcType="VARCHAR" />
+    <result column="value04" property="value04" jdbcType="VARCHAR" />
+    <result column="field05" property="field05" jdbcType="VARCHAR" />
+    <result column="value05" property="value05" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="vitily.com.tb_entity.order.TbOrderOperaRecord" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListBaseResultMap" type="vitily.com.tv_entity.order.TvOrderOperaRecord" extends="BaseResultMap" >
+    <result column="memName" property="memName" jdbcType="VARCHAR" />
+    <result column="memRealName" property="memRealName" jdbcType="VARCHAR" />
+    <result column="admUserName" property="admUserName" jdbcType="VARCHAR" />
+    <result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="TvResultMap" type="vitily.com.tv_entity.order.TvOrderOperaRecord" extends="ListBaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`deltag`, e.`state`, e.`type`, e.`order_id`, e.`relation_id`, e.`memo`,
+    e.`member_id`, e.`adm_user_id`, e.`ip`, e.`field01`, e.`value01`, e.`field02`, e.`value02`, e.`field03`,
+    e.`value03`, e.`field04`, e.`value04`, e.`field05`, e.`value05`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`content`
+  </sql>
+  <sql id="query_condition">
+    <if test="null != entity">
+      <if test="entity.orderId != null">
+        and e.order_id=#{entity.orderId}
+      </if>
+      <if test="entity.type != null">
+        and e.type=#{entity.type}
+      </if>
+      <if test="entity.relationId != null">
+        and e.relation_id=#{entity.relationId}
+      </if>
+      <if test="entity.memberId != null">
+        and e.member_id=#{entity.memberId}
+      </if>
+      <if test="entity.admUserId != null">
+        and e.adm_user_id=#{entity.admUserId}
+      </if>
+      <include refid="vitily.com.mapper.comm.CommonMapper.entity_query_condition" />
+    </if>
+    <!-- ts -->
+    <if test="selIp != null and selIp != ''">
+      and e.ip like concat('%',#{selIp,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="typeStr != null and typeStr != ''">
+      and e.type in(${typeStr})
+    </if>
+    <include refid="vitily.com.mapper.comm.CommonMapper.ts_query_condition" />
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_order_opera_record e
+    where e.`id` = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insertSelective" parameterType="vitily.com.tb_entity.order.TbOrderOperaRecord" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_order_opera_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        `create_date`,
+      </if>
+      <if test="deltag != null" >
+        `deltag`,
+      </if>
+      <if test="state != null" >
+        `state`,
+      </if>
+      <if test="type != null" >
+        `type`,
+      </if>
+      <if test="orderId != null" >
+        `order_id`,
+      </if>
+      <if test="relationId != null" >
+        `relation_id`,
+      </if>
+      <if test="memo != null" >
+        `memo`,
+      </if>
+      <if test="memberId != null" >
+        `member_id`,
+      </if>
+      <if test="admUserId != null" >
+        `adm_user_id`,
+      </if>
+      <if test="ip != null" >
+        `ip`,
+      </if>
+      <if test="field01 != null" >
+        `field01`,
+      </if>
+      <if test="value01 != null" >
+        `value01`,
+      </if>
+      <if test="field02 != null" >
+        `field02`,
+      </if>
+      <if test="value02 != null" >
+        `value02`,
+      </if>
+      <if test="field03 != null" >
+        `field03`,
+      </if>
+      <if test="value03 != null" >
+        `value03`,
+      </if>
+      <if test="field04 != null" >
+        `field04`,
+      </if>
+      <if test="value04 != null" >
+        `value04`,
+      </if>
+      <if test="field05 != null" >
+        `field05`,
+      </if>
+      <if test="value05 != null" >
+        `value05`,
+      </if>
+      <if test="content != null" >
+        `content`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="relationId != null" >
+        #{relationId,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="admUserId != null" >
+        #{admUserId,jdbcType=INTEGER},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="field01 != null" >
+        #{field01,jdbcType=VARCHAR},
+      </if>
+      <if test="value01 != null" >
+        #{value01,jdbcType=VARCHAR},
+      </if>
+      <if test="field02 != null" >
+        #{field02,jdbcType=VARCHAR},
+      </if>
+      <if test="value02 != null" >
+        #{value02,jdbcType=VARCHAR},
+      </if>
+      <if test="field03 != null" >
+        #{field03,jdbcType=VARCHAR},
+      </if>
+      <if test="value03 != null" >
+        #{value03,jdbcType=VARCHAR},
+      </if>
+      <if test="field04 != null" >
+        #{field04,jdbcType=VARCHAR},
+      </if>
+      <if test="value04 != null" >
+        #{value04,jdbcType=VARCHAR},
+      </if>
+      <if test="field05 != null" >
+        #{field05,jdbcType=VARCHAR},
+      </if>
+      <if test="value05 != null" >
+        #{value05,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="vitily.com.tb_entity.order.TbOrderOperaRecord" >
+    update tb_order_opera_record
+    <set >
+      <if test="createDate != null" >
+        `create_date` = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deltag != null" >
+        `deltag` = #{deltag,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        `order_id` = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="relationId != null" >
+        `relation_id` = #{relationId,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        `memo` = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        `member_id` = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="admUserId != null" >
+        `adm_user_id` = #{admUserId,jdbcType=INTEGER},
+      </if>
+      <if test="ip != null" >
+        `ip` = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="field01 != null" >
+        `field01` = #{field01,jdbcType=VARCHAR},
+      </if>
+      <if test="value01 != null" >
+        `value01` = #{value01,jdbcType=VARCHAR},
+      </if>
+      <if test="field02 != null" >
+        `field02` = #{field02,jdbcType=VARCHAR},
+      </if>
+      <if test="value02 != null" >
+        `value02` = #{value02,jdbcType=VARCHAR},
+      </if>
+      <if test="field03 != null" >
+        `field03` = #{field03,jdbcType=VARCHAR},
+      </if>
+      <if test="value03 != null" >
+        `value03` = #{value03,jdbcType=VARCHAR},
+      </if>
+      <if test="field04 != null" >
+        `field04` = #{field04,jdbcType=VARCHAR},
+      </if>
+      <if test="value04 != null" >
+        `value04` = #{value04,jdbcType=VARCHAR},
+      </if>
+      <if test="field05 != null" >
+        `field05` = #{field05,jdbcType=VARCHAR},
+      </if>
+      <if test="value05 != null" >
+        `value05` = #{value05,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        `content` = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="select_for_list_tv">
+    select e.*,
+    a.user_name admUserName,
+    m.name memName,
+    case when m.type = 0 then (select real_name from tb_mem_personal_userinfo where member_id=m.id)
+    else (select company_name from tb_mem_company_userinfo where member_id=m.id) end memRealName,
+    of.order_no orderNo
+    from tb_order_opera_record e
+    left join tb_adm_user a on a.id=e.adm_user_id
+    left join tb_mem_base m on m.id=e.member_id
+    left join tb_order_form of on of.id =e.order_id
+  </sql>
+  <select id="selectByPrimaryKeyForTv" resultMap="TvResultMap" parameterType="java.lang.Integer" >
+    <include refid="select_for_list_tv" />
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getCountPaging" parameterType="vitily.com.ts_entity.order.TsOrderOperaRecord" resultType="java.lang.Integer">
+    select count(1) as recordCount from tb_order_opera_record e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" parameterType="vitily.com.ts_entity.order.TsOrderOperaRecord" resultMap="ListBaseResultMap">
+    <include refid="select_for_list_tv" />
+    where 1=1
+    <include refid="query_condition" />
+    <include refid="vitily.com.mapper.comm.CommonMapper.page_info_id_instanceof_sort" />
+  </select>
+</mapper>
